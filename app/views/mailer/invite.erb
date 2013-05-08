@@ -1,0 +1,8 @@
+Dear <%= @invite_request.name %>,
+
+We're glad you signed up for Original Projects.  Just go to the URL below to finish the registration process.
+
+<%= new_url(:invite_token => @invite.token,:display_name => @invite.invite_request.name,:email => @invite.invite_request.email )%>
+
+Thanks!
+The Original Projects Team

@@ -1,0 +1,20 @@
+== Original Projects 
+
+=> Stay tuned for more useful info here ...
+
+=> Steps for setting up development database:
+
+   1) cp config/database.example config/database.yml # Edit database.yml as required
+   2) rake db:migrate # create the tables
+   3) rake db:seed    # loadup the bootstrap database
+   4) rake thinking_sphinx:index  # create the sphinx indices
+   5) rake thinking_sphinx:start  # startup sphinx searchd
+
+=> For checking working in progress test cases:
+
+   1) git checkout code_coverage
+   2) rake test   # for running all test cases
+   OR
+   3) rake test:coverage  # for running testcases and generating rcov report
+   
+   Note: very soon code_coverage will be merged with master.

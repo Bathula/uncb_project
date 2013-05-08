@@ -1,0 +1,38 @@
+<% content_for :page_title, "My Network" %>
+<div id="content">
+  <div style="float:left;display:inline; padding-top:10px;">
+    <h1>Network</h1>
+  </div>
+  <div style="float:right;display:inline;padding-right:40px; ">
+    <ul class="service_filter">
+      <li><span style="position:relative;top:10px;padding:4px;background:#efefef;color:#666666;margin:6px;border:1px solid #cccccc;" class="rounded">sort by</li>
+      <li class="first"><a href="/networks/?sort=a-z&category=<%= params['category'] %>"<% if params[:sort] == "a-z" || !params[:sort] %> class="active"<% end %>>A-Z</a></li>
+      <!--<li><a href="/networks/?sort=location&category=<%#= params['category'] %>"<% if params[:sort] == "location" %> class="active"<% end %>>Location</a></li>-->
+      <li class="last"><a href="/networks/?sort=recent&category=<%= params['category'] %>"<% if params[:sort] == "recent" %> class="active"<% end %>>Most Recent</a></li>
+ 
+    </ul>
+  </div>
+  <div style="clear:both;"></div>
+
+  <div class="column_75"  style="margin-top:20px;">
+
+    <%# @current_members.each do |profile| -%>
+ <% @current_networks.each do |network| -%>
+    <%if network.status.eql?(1)%>
+    <%@ser=ServiceMembership.find_by_service_id(network.member_id)%>
+    
+    <%  @net_profile =Profile.find_by_id(@ser.profile_id)%>
+      <%= render :partial => 'thumb', :locals => {:profile => @net_profile,:member => network} %>
+    <%else%>
+    <%  @net_profile =Profile.find_by_id(network.member_id)%>
+     <%= render :partial => 'thumb', :locals => {:profile => @net_profile,:member => network} %>
+    <% end -%>
+    <%end%>
+      <div class="top2">
+        <p><%=will_paginate @current_networks%></p>
+        <%#*<p>%>
+          <%#*<a href="#top"><span class="arrow">&#8593;</span> Top of page</a>%>
+        <%#*</p>%>
+      </div>
+   </div>
+</div>

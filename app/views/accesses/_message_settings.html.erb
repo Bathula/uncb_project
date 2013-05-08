@@ -1,0 +1,9 @@
+<% content_for :page_title, "My Projects" %>
+<div class="project_row">
+  <% form_for :message_settings ,:url=>{:controller => "accesses",:action => "message_settings_update",:id => params[:id]},:html=>{:method=>:put}do |f| %>
+    <%= f.error_messages %>
+    <%=render :partial=>'form_message_settings',:locals=>{:f=>f}%>
+    <br/>
+    <p style="padding-left: 11px; margin-top: 10px;"><button class="large green" type="submit">Save Changes</button></p>
+  </div>
+<% end %>

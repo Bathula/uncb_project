@@ -1,0 +1,39 @@
+<div class="column col_30">
+
+
+  <div id="profile_polaroid">
+ <%= image_link_to_profile(current_profile, :small) %>
+
+ <center> <%= current_profile.display_name %>
+   <span class="related_action smaller">[<%= link_to "edit", edit_profile_path %>]</span></center>
+
+  </div>
+
+  <h3><span style="color: black;">Inbox </span><%if @msg_count.eql?(0)%><%= @msg_count %> unread <%else%><a href="/inbox/unread/"><%= @msg_count %> unread</a><%end%></h3>
+   <div class="">
+
+    </div>
+  <div class="more_profile_info" style="background:#EAF5F9; padding:10px; ">
+    <ul>
+      <li style="background: url(/images/mail_icon.png) center left no-repeat; padding: 0 0 0 25px;"><a href="/inbox/compose/" id="btn_new_message"><button >Compose Message</button></a></li>
+    </ul>
+  </div>
+
+
+
+    <div id="team_box" class="avatar_box_side">
+        <div class="avatar_box_side_title">
+           <h2>View</h2>
+           <br class="clear"/>
+        </div>
+        <div style="padding: 10px;">
+          <ul style="list-style-type: none;">
+            <li style="background: url(/images/mail_icon.png) center left no-repeat; padding: 0 0 0 25px;"><a <%=link_to "Inbox",'/inbox/'%></a></li>
+            <li style="background: url(/images/mail_icon.png) center left no-repeat; padding: 0 0 0 25px;"><%=link_to "Unread",'/inbox/unread'%></li>
+            <li style="background: url(/images/mail_icon.png) center left no-repeat; padding: 0 0 0 25px;"><a <%=link_to "Sent",'/inbox/sent'%></a></li>
+            <!--<li style="background: url(/images/mail_icon.png) center left no-repeat; padding: 0 0 0 25px;"><a href="notifications">Notifications</a></li>-->
+          </ul>
+        </div>
+      </div>
+  <br /><br /><br /><br /><br /><br />
+</div>

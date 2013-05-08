@@ -1,0 +1,2 @@
+run "ln -nfs /data/originalprojects/shared/config/sphinx /data/originalprojects/releases/config/sphinx"
+run "ln -nfs /data/originalprojects/shared/config/sphinx/config/sphinx.yml /data/originalprojects/releases/config/sphinx.yml"

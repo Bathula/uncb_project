@@ -1,0 +1,11 @@
+<p>Hi <%=@user_username%>,</p>
+<%=link_to "#{@username}",@username_profile_url%> requested to join <%=link_to "#{@project_name}",@project_url%> on Original Projects.
+<p><%=@username%> wrote:</p>
+<p>"<%=@like_to_join%>"</p>
+<p>To accept or deny his membership request go to your Manage Project Membership controls at:</p>
+<p><%=project_members_url(@project)%></p>
+<p>Yours truly, </p>
+
+<p>The Original Projects Team</p>
+
+<p>If you don’t want to receive these notifications, just log into your <%=link_to "Original Projects",my_settings_url%> account and change your notification settings.</p>

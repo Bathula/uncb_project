@@ -1,0 +1,17 @@
+<% content_for :page_title, ' Activation link' %>
+
+<div id="content">
+  <h1>Activation Link</h1>
+
+  <p>Enter your email address and we'll send a link to activate your account.</p>
+
+  <% form_tag send_activation_url do %>
+    <%= label_tag :email, 'Your Email Address' %>
+    <div class="input_frame">
+      <%= text_field_tag :email, nil, :class => "wide"  %>
+    </div>
+
+    <%= submit_tag " Send Activation link" %>
+  <% end %>
+</div>
+

@@ -1,0 +1,35 @@
+
+<%=javascript_include_tag "recaptcha_ajax"%>
+
+
+<%#*<script>%>
+  <%#*var $j = jQuery.noConflict();%>
+<%#*</script>%>
+
+
+<div id="content">
+
+  <h1>Search results for &ldquo;<%= @search.query %>&rdquo;</h1>
+
+  <% if @search.any? %>
+
+    <ul class="search_results">
+      <% @search.each do |result| %>
+        <%if !result.nil?%>
+
+          <%= result_partial(result) %>
+
+        <%end%>
+
+      <% end %>
+    </ul>
+
+    <%= will_paginate %>
+
+  <% else %>
+
+    <p>No results found.</p>
+
+  <% end %>
+
+</div>

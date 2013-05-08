@@ -1,0 +1,56 @@
+ <div id="media" class="anchor">
+<link rel="stylesheet" href="/stylesheets/mediabox/mediaboxAdvWhite.css" type="text/css" media="screen" />
+
+	<script type="text/javascript" src="/javascripts/mediaboxAdv-1.2.0.js"></script>
+<%if @project.images.any?%>
+        <h3>Images</h3>
+<% @project.images.each_with_index do |image, idx| %>
+<a style="margin-right: 10px;" href="<%= image.attachment.url %>" rel="lightbox[images]" title="<%= image.description %>"><%= image_tag image.attachment.url(:avatar) %></a>
+
+  <% end %>
+<%else%>
+No images have been set up yet.
+<%end%>
+<br /><br />
+<% if @project.links.count != 0 %>
+<h3>Video</h3>
+<% @project.links.each_with_index do |link, idx| %>
+<%
+if ( link.url =~ /youtube/ || link.url =~ /vimeo/ )
+  url = link.url
+  info = read(url)
+  title = info[:title]
+  thumb = info[:thumbnail_url]
+else
+url = link.url
+  title = url
+  thumb = "/images/default/op-default-avatar.jpg"
+  end
+
+%>
+<% if ( link.url =~ /youtube/ || link.url =~ /vimeo/ ) %>
+<a href="<%= link.url %>" target="_blank" rel="lightbox[video]" title="<%= title %>" alt="<%= title %>" class="vidlink" style="margin-left:4px;margin-top:4px;"><span class="vidthumb"><img src="<%= thumb %>" height="75" width:100" /></span></a>
+<% end %>
+<% end %>
+<br /><br />
+<h3>Links</h3>
+<% @project.links.each_with_index do |link, idx| %>
+<%
+if ( link.url =~ /youtube/ || link.url =~ /vimeo/ )
+  url = link.url
+  info = read(url)
+  title = info[:title]
+  thumb = info[:thumbnail_url]
+else
+url = link.url
+  title = url
+  thumb = "/images/default/op-default-avatar.jpg"
+  end
+
+%>
+<% if !( link.url =~ /youtube/ || link.url =~ /vimeo/ ) %>
+<a href="<%= link.url %>" target="_blank" rel="lightbox[links]" title="<%= title %>" alt="<%= title %>" class="vidlink"><%= link.url %></a><br />
+<% end %>
+<% end %>
+<% end %>
+    </div>

@@ -1,0 +1,29 @@
+<div class="image" style="margin-bottom:10px;">
+  <% if form.object.new_record? %>
+    <%= form.file_field :attachment, :class => 'with_icon' %>
+  <% else %>
+
+     <div class="edititem">
+    <%= image_tag form.object.attachment.url(:thumbnail), :style=>'float:left;' %>
+  <%#if current_profile.is_originator?(@project)%>
+       <%#*<div class="delete_image_field" style="float:right;">%>
+      <%#= form.check_box '_delete' %>
+      <%#= form.label(:_delete, "Delete") %>
+    <%#*</div>%>
+        <%# end %>
+     </div>
+  <div class="tooltip">
+       <%= image_tag form.object.attachment.url(:avatar),:class => 'project_image' %>
+                 </div>
+
+
+  <%if current_profile.is_originator?(@project)%>
+  <div class="delete_image_field"style="display:block">
+      <%= form.check_box '_delete' %>
+      <%= form.label(:_delete, "Delete") %>
+    </div>
+  <% end %>
+
+  <% end %>
+  <div class="clear"></div>
+</div>

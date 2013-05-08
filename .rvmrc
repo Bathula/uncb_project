@@ -1,0 +1,9 @@
+export rvm_trust_rvmrcs_flag=1
+
+export rvm_gem_options="--no-rdoc --no-ri"
+
+export rvm_gemset_create_on_use_flag=1
+
+# export rvm_configure_flags="--with-openssl-dir=$rvm_path/usr --with-readline-dir=$rvm_path/usr"
+
+rvm use 1.8.7-head@op --create

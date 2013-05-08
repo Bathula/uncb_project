@@ -1,0 +1,121 @@
+<% content_for :page_title, "My Settings" %>
+ <div id="accounts">
+        
+ </div>
+<div id="content">
+  <div class="column col_100">
+    <ul class="notification_filter"style="padding-left:2px;">
+      <li class="first"><%= link_to "Notifications", "#", :class => "active" %></li>
+              <li class="last"><%= link_to "Account",password_accesses_url,:class=>"" %></li>
+
+
+    </ul>
+    <br class="clear" />
+    <br/>
+    <div  class="message notice" >
+      <p>Original Projects notifies you whenever actions occur related to projects you are involved in.</p>
+      <p>Each project has its own notification settings.</p>
+      <p>Check the boxes for each notification you'd like to receive at <strong><%=current_profile.email%></strong>.</p></div>
+    <%= render_messages %>
+    <div id="my_projects">
+      <% if  @projects_originated.present?%>
+        <div class="categories rounded originated projects">
+            <h2>Projects I've originated</h2>
+          <%for originator in @projects_originated%>
+          
+            <%@originated=Membership.find_by_profile_id_and_project_id_and_originator(current_profile.id,originator.id,true)%>
+            <div class="project_row">
+              <table style="width: 600px;">
+                <tr>
+                  <td style="width:60px;"><%= link_to image_tag(originator.avatar.url(:square_60), :height => 60, :width => 60), originator, :class => "img_link left" %></td>
+                  <td style="height: 20px; width: 330px;"><h3 style="margin-bottom:0px;margin-left:10px;"><%= link_to "#{originator.title}",project_path(originator)%></h3></td>
+                  <%if originator.membership_status=="open"%>
+                    <td style="height: 20px; width: 200px; text-align: left;"> <%= (link_to_function "Edit Settings",{:onclick => "origin_new_request(#{@originated.id});"})%></td>
+                  <%else %>
+                    <td style="height: 20px; width: 200px; text-align: left;"> <%= (link_to_function "Edit Settings",{:onclick => "origin_new(#{@originated.id});"})%></td>
+                  <%end%>
+                </tr>
+              </table>
+              <div id="origin_<%=@originated.id%>"></div>
+            </div>
+          <% end %>
+        </div>
+      <%end%>
+      <%if @projects_members.present?%>
+        <div class="categories rounded originated projects">
+          <h2>Projects I'm Collaborating On </h2>
+          <%for member in @projects_members%>
+            <%@collaborator=Membership.find_by_profile_id_and_project_id_and_originator(current_profile.id,member.id,false)%>
+            <div class="project_row">
+              <table style="width: 600px;">
+                <tr>
+                  <td style="width:60px;"> <%= link_to image_tag(member.avatar.url(:square_60), :height => 60, :width => 60),member, :class => "img_link left" %></td>
+                  <td style="height: 20px; width: 330px;"><h3 style="margin-bottom:0px;margin-left:10px;"><%= link_to "#{member.title}",project_path(member)%></h3></td>
+                  <%if member.membership_status=="open"%>
+                    <td style="height: 20px; width: 200px; text-align: left;"> <%= (link_to_function "Edit Settings",{:onclick => "collab_new_request(#{@collaborator.id});"})%></td>
+                  <%else %>
+                    <td style="height: 20px; width: 200px; text-align: left;"> <%= (link_to_function "Edit Settings",{:onclick => "collab_new(#{@collaborator.id});"})%></td>
+                  <%end%>
+                </tr>
+              </table>
+              <div id="collab_<%=@collaborator.id%>"></div>
+            </div>
+          <% end %>
+        </div>
+      <%end%>
+
+
+      <%if @projects.present?%>
+        <div class="categories rounded originated projects">
+          <h2>Projects I'm Following</h2>
+          <%for project in @projects%>
+            <%@follow=Interest.find_by_profile_id_and_project_id(current_profile.id,project.id)%>
+            <div class="project_row">
+              <table style="width: 600px;">
+                <tr>
+                  <%if !project.avatar.nil?%>
+                    <td style="width:60px;"><%= link_to image_tag(project.avatar.url(:square_60), :height => 60, :width => 60),project %></td>
+                  <%else%>
+                    <td style="width:60px;"><%= link_to image_tag('default/square_60_op-default-avatar.jpg'),project %></td>
+                  <%end%>
+                  <td style="height: 20px;width: 330px;"><h3 style="margin-bottom:0px;margin-left:10px; "><%= link_to "#{project.title}",project_path(project)%></h3></td>
+                  <%#if project.membership_status=="open"%>
+                    <td style="height: 20px; width: 200px; text-align: left;"> <%= (link_to_function "Edit Settings",{:onclick => "follow_new_request(#{@follow.id});"})%></td>
+                               </tr>
+              </table>
+              <div id="follow_<%=@follow.id%>"></div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+<div class="categories rounded originated projects">
+          <h2>Inbox</h2>
+
+            <div class="project_row">
+
+               <table style="width: 600px;">
+                <tr>
+                  <%if !current_profile.avatar.nil?%>
+                    <td style="width:60px;"><%= link_to image_tag(current_profile.avatar.url(:square_60), :height => 60, :width => 60),current_profile %>
+                    </td>
+                  <%else%>
+                    <td style="width:60px;"><%= link_to image_tag('default/square_60_op-default-avatar.jpg'),current_profile %>
+                    </td>
+                  <%end%>
+                  <td style="height: 20px;width: 330px;"><h3 style="margin-bottom:0px;margin-left:10px; "><%= link_to "#{current_profile.display_name}",profile_path(current_profile)%>
+                    </h3></td>
+                  <%#if project.membership_status=="open"%>
+                    <td style="height: 20px; width: 200px; text-align: left;"> <%= (link_to_function "Edit Settings",{:onclick => "message_settings(#{current_profile.id});"})%>
+                    </td>
+                               </tr>
+              </table>
+              <div id="message_inbox"></div>
+            </div>
+
+        </div>
+
+    </div><!-- closing #my_projects -->
+  </div><!-- closing column -->
+</div><!-- closing #content -->
+
+

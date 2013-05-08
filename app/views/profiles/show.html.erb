@@ -1,0 +1,218 @@
+<% content_for :page_title, 'My Profile' %>
+<div id="content">
+  <div class="column col_30">
+    <div id="profile_polaroid">
+      <img src="<%= @profile.avatar.url(:avatar) %>" alt="<%= @profile.display_name %>" style="border:1px solid #AAAAAA; margin-bottom:0px;" />
+    <%if logged_in? && !current_profile.members.include?(@profile)%>
+  <%if !current_profile.eql?(@profile)%>
+
+
+      <span style="margin-right:4px; float:left;"><%=link_to(image_tag('/images/add_to_network_large.gif' ,:style=>"border:none;"), networks_path(:member_id => "#{@profile.id}"), :method => :post)%>
+    </span>
+<%end%>
+      <%else%>
+      <%if logged_in?%>
+     <%if current_profile.members.include?(@profile)%>
+      <%#if !current_profile%>
+    <%=link_to(image_tag('/images/btn_in_network_large.gif',:style=>"border:none;" ),delete_networks_path(:member_id => "#{@profile.id}"), :method => :delete,:confirm=>"Are you sure you want to delete this contact from your network.")%>
+<%#end%>
+<%end%>
+    <%else%>
+       <span style="float:left; width:130px; text-align:center; padding-left:20px;">
+</span>
+    <%end%>
+
+     <%end%>
+    </div>
+
+    <div class="more_profile_info">
+      <ul>
+        <li><strong>Location:</strong> <%= @profile.city %>, <%= @profile.state %></li>
+        <li><strong>Joined On:</strong> <%= @profile.created_at.strftime("%B %e, %Y") %></li>
+        <% if @profile.current_login_at.present? %>
+          <li><strong>Last Login:</strong>
+            <%= @profile.current_login_at.strftime("%B %e, %Y") %>
+          </li>
+        <% end %>
+        <% profile = @profile %>
+          <%if logged_in? && !current_profile.eql?(@profile)%>
+        <li><%= link_to "Send a message",:controller=>"inboxes",:action=>"compose",:orig_id=>@profile.id, :type => "service" %></li>
+        <%end%>
+      </ul>
+    </div>
+
+    <div id="user_activity_feed">
+      <%#*<h2>Recent Activity</h2>%>
+ 
+      <%#*<ul>%>
+        <%#@activity=Activity.for_profile_recent(@profile).latest(10)%>
+        <%# @activity.each do |activity| %>
+          <%#= activity_for_profile(activity) %>
+        <%#end%>
+      <%#*</ul>%>
+    </div>
+  </div>
+
+  <div class="column col_70">
+
+    <h1 class="top"><span class="gray">People:</span> <%= @profile.display_name %></h1>
+
+    <div id="tabs">
+      <ul>
+        <li><a class="first" href="#projects">Projects</a></li>
+        <%#*<li><a href="#service">Services</a></li>%>
+        <li><a href="#activity">Activity</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+      <br class="clear" />
+
+      <div id="projects" class="anchor">
+
+        <% if @originated_projects.any? %>
+          <h2>Projects I've Originated&hellip;</h2>
+          <%= render :partial => "project", :collection => @originated_projects %>
+        <% end %>
+
+        <% if @collaborating_projects.any? %>
+          <h2>Projects I'm Collaborating On&hellip;</h2>
+          <%= render :partial => "project", :collection => @collaborating_projects %>
+        <% end %>
+
+        <% if @followed_projects.any? %>
+          <h2>Projects I'm Following&hellip;</h2>
+          <%= render :partial => "project", :collection => @followed_projects %>
+        <% end %>
+      </div>
+
+      <div id="service" class="anchor">
+        <%# if @services.any? %>
+          <%#*<h2>Services I Provide&hellip;</h2>%>
+          <%#= render :partial => "service", :collection => @services %>
+        <%#else%>
+          <%#=@profile.display_name has not set up any services yet.%>
+        <%#end%>
+      </div>
+
+
+
+
+      <div id="activity" class="anchor">
+        <h2>Activity</h2>
+
+        <% Activity.for_profile(@profile).latest(10).each do |activity| %>
+          <div class="activity_update">
+
+            <%= image_link_to_profile(activity.profile, :thumbnail) unless activity.profile.nil? %>
+            <p><%= activity_to_html(activity) unless activity.nil? %></p>
+            <p class="activity_date">
+              <%= display_date(activity.updated_at) unless activity.nil? %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+
+      <div id="about" class="anchor">
+        <% if @profile.display_name.present? %>
+          <p><h2>Full name</h2>
+
+          <%= simple_format(html_escape(@profile.display_name)) %></p>
+        <% end %>
+
+      
+
+
+
+
+        <% if @profile.country.present? %>
+           <p><h2>Country</h2>
+
+          <%= simple_format(html_escape(@profile.country)) %> </p>
+        <% end %>
+        <% if @profile.state.present? %>
+           <p><h2>State</h2>
+
+          <%= simple_format(html_escape(@profile.state)) %> </p>
+        <% end %>
+        <% if @profile.city.present? %>
+           <p><h2>City</h2>
+
+          <%= simple_format(html_escape(@profile.city)) %> </p>
+        <% end %>
+        <% if @profile.zip.present? %>
+           <p><h2>Zip</h2>
+
+          <%= simple_format(html_escape(@profile.zip)) %> </p>
+        <% end %>
+        <% if @profile.email.present? %>
+           <p><h2>Email</h2>
+
+          <%= mail_to(html_escape(@profile.email)) %> </p>
+        <% end %>
+
+        
+
+        <% if @profile.biography.present? %>
+           <p><h2>Biography</h2>
+
+          <%= simple_format(html_escape(@profile.biography)) %> </p>
+        <% end %>
+
+        <% if @profile.education.present? %>
+           <p><h2>Education</h2>
+
+          <%= simple_format(html_escape(@profile.education)) %> </p>
+        <% end %>
+
+        <% if @profile.employment.present? %>
+           <p><h2>Employment</h2>
+
+          <%= simple_format(html_escape(@profile.employment)) %> </p>
+        <% end %>
+
+        <% if @profile.hobbies.present? %>
+           <p><h2>Hobbies</h2>
+
+          <%= simple_format(html_escape(@profile.hobbies)) %> </p>
+        <% end %>
+
+        <% if @profile.skills.present? %>
+           <p><h2>Skills</h2>
+
+          <%= simple_format(html_escape(@profile.skills)) %> </p>
+        <% end %>
+
+        <% if @profile.pastproj.present? %>
+           <p><h2>Past Original Projects</h2>
+
+          <%= simple_format(html_escape(@profile.pastproj)) %> </p>
+        <% end %>
+
+        <% if @profile.originalproj.present? %>
+          <p><h2>Projects I Think are Original</h2>
+
+          <%= simple_format(html_escape(@profile.originalproj)) %></p>
+        <% end %>
+
+
+        <% if @profile.links.any? %>
+          <h2>Links</h2>
+
+          <ul>
+            <% @profile.links.each do |link| %>
+              <li><%= auto_link_urls( link.url,:target => '_blank') %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <br class="clear" />
+</div>
+
+<% content_for :javascript do %>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $("#tabs").tabs();
+    });
+  </script>
+<% end %>

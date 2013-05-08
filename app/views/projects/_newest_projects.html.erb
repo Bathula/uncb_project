@@ -1,0 +1,44 @@
+
+
+<% if project -%>
+<div class="service_container" style="border: 1px solid;border-color: #cccccc; width:320px;">
+  <div style="width:140px; float:left;"> <%= link_to(image_tag(project.avatar.url(:small), :class => 'border',:width => '110px',:height => '110px'), project_path(project),:class => 'img_link',  :style=>'padding-bottom:0px;') -%>
+ <br/>
+ <%if logged_in?  &&  !current_profile.members.collect(&:id).to_s.include?(project.originators.collect(&:id).to_s) && !current_profile.originated_projects.include?(project)%>
+ <span  style="position:relative; top:0px; left:0px;">
+<%=link_to(image_tag('/images/add_to_network.png' ),networks_path(:member_id => "#{project.originators.collect(&:id).join(":")}"), :method => :post)%></span>
+
+ <%else%>
+
+   <%if logged_in?%>
+ <%if current_profile.members.collect(&:id).to_s.include?(project.originators.collect(&:id).to_s)%>
+ <%=link_to(image_tag('/images/add_to_network_minus.png' ),delete_networks_path(:member_id => "#{project.originators.collect(&:id)}"), :method => :delete,:confirm=>"Are you sure you want to delete this contact from your network.")%>
+<%end%>
+
+
+<%else%>
+   <span style="float:left; width:110px; text-align:center;"><%= link_to "Signin",login_path %> or <%= link_to "Signup",signup_url %> </span>
+   <%end%>
+
+
+   <%end%>
+
+ </div>
+	<div class="service_info" style="width:170px; word-wrap:break-word;">
+	  <h2 style="padding-top:0px;line-height:1.1em;">
+      <%= link_to truncate(project.title,:length=>33), project_path( project ) -%>
+    </h2>
+         <p> <span style="float:left; width:140px; word-wrap:break-word;"><%=truncate(project.short_description, :length => 200)%></span><% if project.short_description.length > 20 %> <%=link_to "More",project_path(project)%><%end%><br/>
+
+      <strong><%= if originators.count == 1 then "Originator" else "Originators" end %>:</strong> <%= originators.map(&:name).to_sentence %><br/>
+
+      <strong><%= if originators.count == 1 then "Location" else "Location" end %>:</strong>
+      <%= originators.map(&:location).to_sentence %><br/>
+
+      <strong>Category: </strong> <%= project.projectcategory.name unless project.projectcategory.nil? %><br/>
+          </p>
+	</div>
+</div>
+<% end -%>
+
+

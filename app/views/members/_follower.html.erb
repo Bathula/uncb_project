@@ -1,0 +1,8 @@
+<li>  
+  <%= image_link_to_profile(follower, :thumbnail) %>
+  <%= link_to follower.display_name, follower %>
+  <p class="options">   
+  <%= link_to "remove", project_member_url(project, follower,:follower => "follower"), :method => :delete,
+          :confirm => "Remove #{follower.display_name} from #{project.title}?" %>
+  </p>
+</li>

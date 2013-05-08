@@ -1,0 +1,226 @@
+<% content_for :page_title, 'Signup' %>
+
+<div style="float:left; width:710px;">
+  <h1>Three Easy Ways To Sign Up</h1>
+    <%#*<div class="social" style="float:left;">Sign Up Using a <span class="fbColor">Facebook</span><br />%>
+    <%#*or <span class="linkedColor">Linked</span><span class="fbColor">In</span> Account</div>%>
+  <%#*<div class="clear"></div>%>
+    <p style="font-size:13px; color:#666666;"><span class="fbColor">Already social?</span> Sign Up to Original Projects with your Facebook<br />
+    or LinkedIn Account. <span class="fbColor">It's fast and easy.</span></p><br /><br />
+
+    <div style="float:left;"> <%= fb_connect_javascript_tag %>
+<%= init_fb_connect "XFBML",:js=>'jquery'%>
+<%= fb_login_and_redirect(email_entry_url) %></div>
+    <img style="float:left; padding-left:10px;" src="/images/or.gif" />
+<div style="float:left; padding-top:3px; margin-left:10px;">
+<script type="IN/Login" data-onAuth="onLinkedInAuth"></script></div>
+  <br /><br /><br /><br /> 
+
+    <span class="font-size:13px; color:#000000;">* Privacy Note</span><br />
+    <span style="font-size:13px; color:#666666;">We don't share any personal information<br />or post anything to your profile</span>
+
+</div>
+<div class="clear"></div>
+
+<div style="border-top:1px dashed #cccccc; width:100%; margin:30px 0px;"></div>
+
+
+
+
+
+
+
+
+<div id="content">
+
+  <div class="column col_100">
+    <h1>Fill Out The Form Below</h1>
+
+    <% form_for :new_profile,@new_profile, :url => {:action=>"create"},:html=>{:id=> "new_profile"} do |form| -%>
+      <div id="edit_profile">
+        <div class="box">
+          <%=form.label(:display_name,"Full name" ,:class=> "required1")%><div class="clear"></div>
+          <div class="input_frame">
+            <%= form.text_field(:display_name, :class => 'wide')  %>
+          </div>
+            
+            <label class="error" style="display: none"for="new_profile_display_name" generated="true"></label>
+          <div class="clear"></div></div>
+
+
+        <br class="clear">
+        <div class="box">
+          <%=form.label(:email,"Email" ,:class=> "required1")%><div class="clear"></div>
+          <div class="input_frame">
+            <%= form.text_field(:email, :class => 'wide')  %>
+          </div>
+          <label class="error" style="display: none"for="new_profile_email" generated="true"></label><div class="clear"></div></div>
+        <br class="clear">
+
+        <div class="box">
+          <%=form.label(:email_verification,"Email Confirmation" ,:class=> "required1")%><div class="clear"></div>
+          <div class="input_frame">
+            <%= form.text_field(:email_verification, :class => 'wide')  %>
+          </div>
+          <label class="error" style="display: none"for="new_profile_email_verification" generated="true"></label><div class="clear"></div></div>
+
+
+ <br class="clear">
+
+        <div class="box">
+          <div class="label_input_float">
+            <%= form.label :password,"Password",:class=>"required1" %><div class="clear"></div>
+            <div class="input_frame">
+              <%= form.password_field(:password, :class => 'short password_field') %>
+            </div>
+          </div>
+          <label class="error" style="display: none"for="new_profile_password" generated="true"></label><div class="clear"></div></div>
+        <br class="clear">
+        <div class="box">
+          <div class="label_input_float">
+            <%= form.label :password_confirmation,"Password Confirmation",:class=>"required1" %><div class="clear"></div>
+            <div class="input_frame">
+              <%= form.password_field(:password_confirmation, :class => 'short password_field') %>
+            </div>
+          </div>
+          <label class="error" style="display: none"for="new_profile_password_confirmation" generated="true"></label><div class="clear"></div></div>
+        <div class="clear"></div>
+        <div class="box2">
+          <div class="option_set">
+            <div class="option_box">
+              <ul>
+                <li>
+                  <label><%= check_box_tag(:tos_accepted) %>
+                    I accept the <%= link_to 'Terms of Use', tos_path, :target => 'blank' %></label></li>
+                <div class="er2"> <label class="error" style="display: none"for="tos_accepted" generated="true"></label></div>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div class="box2">
+          <div class="option_set">
+            <div class="option_box">
+              <ul>
+                <li>
+                  <!-- added newsletter column into profiles table -->
+                  <label><%= check_box_tag :newsletter,1,1 %>
+                    Please include me in Original Projects email updates! </label>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div class="box2">
+          <%= form.submit('Sign Up', :class => 'button') %>
+        </div>
+      </div><!-- closing #edit_profile -->
+    <% end -%> 
+  </div>
+ </div><!-- closing #content -->
+<% content_for :javascript do %>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+ 
+    $.validator.addMethod("DISPLYNAME", function(value, element) {
+    return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);
+    }, "Please enter a valid fullname.");
+
+    $("span.validationMessage:empty").hide();
+
+      $("#new_profile").validate({
+        rules: {
+          "new_profile[display_name]": {
+          // remote:"/profiles/check_username"
+           required:true,
+         DISPLYNAME:"required DISPLAYNAME",
+                    },
+          "new_profile[email]": {
+            required: true,
+            email: true,
+           remote:"/profiles/check_email"
+          },
+          "new_profile[email_verification]": {
+           required: true,
+           equalTo: "#new_profile_email",
+            email: true,
+            remote:"/profiles/check_email"
+          },
+          "new_profile[password]": {
+            required: true,
+            minlength: 5
+          },
+          "new_profile[password_confirmation]": {
+            required: true,
+            minlength: 5,
+            equalTo: "#new_profile_password"
+          },
+          
+           
+          tos_accepted:"required"
+        },
+        messages: {
+          "new_profile[display_name]": {
+            //remote: "Username has already been taken"
+            required: "Please provide a full name",
+          },
+          "new_profile[password]": {
+            required: "Please provide a password",
+            minlength: "Your password must be at least 5 characters"
+          },
+          "new_profile[password_confirmation]": {
+            required: "Please provide a password",
+            minlength: "Your password must be at least 5 characters",
+            equalTo: "Please enter the same password as above"
+          },
+          "new_profile[email]": {
+            required:"Please enter a valid email address",
+            remote:"Email has already been taken"
+          },
+          "new_profile[email_verification]": {
+            required:"Please enter a valid email address",
+            equalTo: "Please enter the same email as above"
+            //remote:"Email has already been taken"
+          },
+          tos_accepted: "Please accept the Terms of Use"
+        }
+      });
+      
+    });
+  </script>
+<script type="text/javascript">
+function onLinkedInAuth() {
+  IN.API.Profile("me")
+    .result( function(me) {
+      var id = me.values[0].id;
+      var first_name = me.values[0].firstName;
+      var last_name = me.values[0].lastName;
+     document.cookie = "window_name="+id;
+     document.cookie = "window_first_name="+first_name;
+     document.cookie = "window_last_name="+last_name;
+      // AJAX call to pass back id to your server
+     // jQuery.ajax({
+       // type: "GET",
+        //url: "/passwords/email_linkedin",
+        //dataType: 'script',
+        //data: {
+          //  'id' : id,
+            //'first_name': first_name,
+            //'last_name' : last_name
+             // },
+       if (id)
+       // success: function(response){
+                  // data.redirect contains the string URL to redirect to
+                  //eval(response);
+           window.location.replace("http://originalprojects.com/passwords/email_linkedin");
+                   //loader.remove();
+       //}
+   // });
+
+
+    });
+}
+</script>
+
+<% end %>

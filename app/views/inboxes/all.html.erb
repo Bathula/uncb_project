@@ -1,0 +1,118 @@
+<% content_for :page_title, "All Messages" %>
+<div id="content">
+  <%= render :partial => "shared/inbox_sidebar" %>
+  <div class="column col_70">
+    <h1 class="top" style="padding-top: 3px; margin-bottom:0px;">All Messages</h1>
+    <div class="clear" style="margin-bottom:0px;"></div>
+    <div class="selectAnchor" style="margin-bottom:5px">
+      <%if !@imessages.count.eql?(0)%>
+      Select : &nbsp;&nbsp;<a href="#" onclick="select_all_checkboxes();return false;">All</a>,&nbsp;&nbsp;<a href="#" onclick="uncheck_all_checkboxes();return false;">None</a>
+      <%end%>
+    </div>
+    <div class="clear" style="margin-bottom:0px;"></div>
+    <div id="activity_feed" style="margin-bottom:0px;"></div>
+    <% form_tag ({:action => 'delete_selected_message'}) do %>
+   
+    <% @imessages.each do |m| %>
+    <% if m.status.eql?("unread") %>
+      <div class="inbox_container" style="border: 1px solid;border-collapse: collapse; border-color: #cccccc; padding: 10px; margin: 0; ">
+        <%else%>
+        <div class="inbox_container" style="border: 1px solid;border-collapse: collapse; border-color: #cccccc; padding: 10px; margin: 0;background-color:#F0F1F1;">
+          <%end%>
+          <div class="delChkBox"><%= check_box_tag(:delete_message_id,m.message.id) %></div>
+        
+        <div id="inbox-col-1" style="float: left; margin-right: 5px; width: 40px;"
+             <%if !m.message.from.nil?%>
+        <%if !m.message.from.avatar.nil? && m.message.from.active?%>
+           <%= link_to(image_tag(m.message.from.avatar.url(:thumbnail),:style=>"padding-left:5px;"), m.message.from) %>
+        <%else%>
+          <%= link_to(image_tag('default/thumbnail_op-default-avatar.jpg', :style=>"padding-left:5px;")) %>
+        <%end%>
+             <%else%>
+
+              <%= link_to(image_tag('default/thumbnail_op-default-avatar.jpg', :style=>"padding-left:5px;")) %>
+             <%end%>
+      </div><!-- #inbox col 1 -->
+      <div id="inbox-col-2" style="float: left; width: 140px; margin:0px 5px 0px 5px;">
+        <ul style="list-style-type:none;">
+          <%if !m.message.from.nil?%>
+          <li style="font-size: 1.2em; font-weight: bold; margin-bottom: 2px;"><%= link_to m.message.from.display_name, m.message.from %></li>
+           <span class="gray"><%= display_date(m.message.created_at) %></span>
+        <%else%>
+           <%@profile=Profile.find_with_deleted(m.message.from_id)%>
+            <li style="font-size: 1.2em; font-weight: bold; margin-bottom: 2px;"><%= @profile.display_name%></li>
+           <span class="gray"><%= display_date(m.message.created_at) %></span>
+           <%end%>
+        </ul>
+      </div><!-- #inbox col 2 -->
+      <div id="inbox-col-3" style="float: left; width: 200px; margin-left:5px;">
+        <ul style="list-style-type:none;">
+
+          <li style="font-size: 1.2em; font-weight: bold;">
+            
+<%= link_to truncate(m.message.subject, 25, "..."), inbox_message_path( :id => Message.to_param(m.message),:reply=>'yes',:rto=>'all') %>
+            
+          </li>
+          <li style="font-size: 1em; color: black;"><%=  truncate(m.message.body, 40, "...") %></li>
+        </ul>
+      </div><!-- #inbox col 3 -->
+      <div id="inbox-col-4" style="float: left;width: 15px; padding-top: 0px;">
+        
+    
+    <%if m.message.message_attachments.exists?%>
+    <div style="margin-bottom: 10px;margin-top:4px;"><%=image_tag "attach_icon.png"%></div>
+    <%end%>
+
+        <%= link_to '<span>X</span>', delete_message_path(:id => Message.to_param(m.message)) %>
+      </div><!-- #inbox col 4 -->
+      <div style="float: none; clear: both;"></div>
+    </div><!-- .inbox container -->
+
+  <% end %>
+  <div id="pagination" style="margin-top: 10px;"><%= will_paginate @imessages %></div>
+  <input type="hidden" name="un" value="a">
+   <input type="hidden" name="delete_ids" id="delete_ids">
+  <%if !@imessages.count.eql?(0)%>
+  <%=image_submit_tag("btn_delete.gif",:onclick=>"return get_message_ids();",:style=>"border:none; float:right; padding:0px;")%>
+  <%end%>
+<%end%>
+</div>
+</div>
+  <script type="text/javascript">
+function get_message_ids()
+{
+  var checkbox_object=document.getElementsByName('delete_message_id');
+  var delete_ids='';
+  for(var i=0;i<checkbox_object.length;i++)
+    {
+      if(checkbox_object[i].checked==true)
+        {
+          delete_ids=delete_ids+checkbox_object[i].value+":";
+        }
+    }
+    document.getElementById('delete_ids').value=delete_ids;
+  return true;
+}
+function select_all_checkboxes()
+{
+  var checkbox_object=document.getElementsByName('delete_message_id');
+  for(var i=0;i<checkbox_object.length;i++)
+    {
+
+      checkbox_object[i].checked=true;
+
+    }
+ 
+}
+function uncheck_all_checkboxes()
+{
+  var uncheckbox_object=document.getElementsByName('delete_message_id');
+  for(var i=0;i<uncheckbox_object.length;i++)
+    {
+
+      uncheckbox_object[i].checked=false;
+
+    }
+
+}
+  </script>

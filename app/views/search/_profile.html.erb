@@ -1,0 +1,20 @@
+<li style="height:auto; border:none; margin-bottom:0px;">
+  <div class="first" style="float:left; height:auto;" >
+    <%= image_link_to_profile(profile, :square_60) %>
+   <h3 style="margin-bottom:5px;"><%= link_to truncate(profile.name, :length => 25), profile %></h3>
+    <%= profile.location %><br />
+    <%= profile.country %> </div>
+
+  <div style="height:auto; overflow:auto; margin-top:0px; padding-top:0px; float:left; width:300px;">
+    <strong>Projects:</strong> <%= profile.projects.map {|p| link_to p.title, p if p.active? && p.public? } * ", " %>
+  </div>
+
+  <div class="last" style="float:left; width:130px; height:auto;">
+    <%if logged_in?%>
+    <%= link_to "Send a message", new_profile_message_path(profile),:rel => "facebox", :id=>"send_message"%>
+    <%end%>
+  </div>
+ 
+</li>
+ <div style="clear:both; border-bottom:1px solid #cccccc; line-height:1px; margin:0px 0px 8px 0px; padding-top:6px;">&nbsp;</div>
+ 

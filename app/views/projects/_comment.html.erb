@@ -1,0 +1,38 @@
+
+
+
+<p>
+  <span class="update_leader"><strong><%= comment.profile.name %>:</strong></span>
+  <%= comment.content %>
+</p>
+
+<p class="activity_date">
+  <%= display_date(comment.updated_at) %> &middot;
+  <%= link_to "Comment", "#", :class => "reply_toggle" %>
+</p>
+
+<div class="replies">
+
+  <ul>
+  <% comment.replies.each do |reply| %>
+    <li>
+      <%= image_link_to_profile reply.profile, :thumbnail %>
+      <p>
+        <strong><%= reply.profile.name %>:</strong>
+        <%= s reply.content %>
+      </p>
+      <p class="date"><%= display_date(reply.updated_at) %></p>
+    </li>
+  <% end %>
+  </ul>
+
+  <% form_for [comment, Reply.new] do |f| %>
+    <%= f.text_area :content, :rows => 2 %>
+      <%if logged_in?%>
+    <button type="submit">Comment</button>
+     <%else%>
+
+     Please <%= link_to "Signin",login_path %> or <%= link_to "Signup",signup_url %> to Comment.
+     <%end%>
+  <% end %>
+</div>

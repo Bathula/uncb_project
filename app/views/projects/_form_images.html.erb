@@ -1,0 +1,87 @@
+
+<script src="/javascripts/jquery-tools.js" type="text/javascript"></script>
+<script>
+$(document).ready(function() {
+
+$("div.edititem").tooltip({ effect: 'fade'}).dynamic({ bottom: { direction: 'down', bounce: true } });
+});
+</script>
+
+<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+<%
+project = @project
+%>
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+
+      <li class="ui-state-default ui-corner-top"><%= link_to "Media", edit_project_images_path(project) %></li>
+    </ul>
+</div>
+<br />
+<h2>Edit images  for Slide Show <%= project.title %></h2>
+<br />
+<% form_for setup_with(@project, :images),:id=>@project,:html => { :multipart => true }, :builder => OriginalProjects::FormBuilder do |form| %>
+
+  <div>
+
+   
+
+<label class="required">Upload Images to Project Slide Show</label>
+      <br/>
+
+      <div class="input_frame">
+        <% if @project.errors.on("images.attachment").present? -%>
+          <p class="error">
+            You attempted to upload a disallowed file type. JPG, GIF, and PNG formats are accepted.
+          </p>
+        <% end -%>
+          <p class="small_note">Mouseover image thumbnails below to view each image in larger size.</p>
+               <%#*<small>Mouseover image thumbnails below to view each image in larger size.</small><br /><br />%>
+
+        <div id="image_collection" style="display:block;">
+
+          <% form.fields_for :images do |image_form| %>
+            <%= render :partial => 'image_form', :locals => {:form => image_form} %>
+          <% end %>
+        </div>
+        <button id="add_image">Add More Images</button>
+        <p class="smaller">Maximum file size of 5 MB. Images will be resized to fit in a 453×360 slideshow.</p>
+      <p class="smaller">Only JPG, GIF, and PNG formats are accepted</p>
+      <button class="large green" type="submit">Save Changes</button>
+      </div>
+
+
+     
+<% end %>
+
+    
+
+  </div>
+
+
+    <h2>Video and other links</h2>
+    <div class="input_frame" style="width:660px;">
+      <div id="link_collection">
+      <small>Links to <a href="http://www.youtube.com">YouTube</a> and <a href="http://www.vimeo.com">Vimeo</a> videos will appear under "Video" in your project's "Media" tab with a thumbnail link, and the videos will pop-up in an embedded player.  Other links will appear in the "Links" section.<br /><br />
+      
+      </small>
+<% form_for setup_with(@project, :links), :url => project_url(@project), :method => :post do |form| -%>
+        <% form.fields_for :links do |link_form| %>
+          <%= render :partial => 'images/link_form', :locals => {:form => link_form} %>
+        <% end %>
+      </div>
+      <button id="add_link">Add Another Link</button><br />
+          <button class="large green" type="submit">Save Changes</button>
+    </div>
+
+
+ <% content_for :javascript do %>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+      setupMultiFields('image', <%= generate_form_template(form, :image) %>);
+      setupMultiFields('link', <%= generate_form_template(form, :link, :class_name => 'ProjectLink') %>);
+
+    });
+  </script>
+  <% end %>
+
+<% end %>

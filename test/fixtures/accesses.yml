@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  profile_id: 1
+  project_id: 1
+  join_project: false
+  like: false
+  follow: false
+  blog_comments: false
+
+two:
+  profile_id: 1
+  project_id: 1
+  join_project: false
+  like: false
+  follow: false
+  blog_comments: false

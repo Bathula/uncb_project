@@ -1,0 +1,8 @@
+Dear <%= @display_name %>,
+
+We're glad you asked  up for Original Projects to resend the activation email .  Just go to the URL below to finish the registration process.
+
+<%= edit_profile_url(:perishable_token => @profile.perishable_token ,:email=> @profile.email)%>
+
+Thanks!
+The Class Projects Team

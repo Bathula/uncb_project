@@ -1,0 +1,270 @@
+<% content_for :page_title, 'Signup' %>
+
+     
+
+      <div id="messages">
+        <div class="message" style="width:520px;">
+          <strong>Do you have Original Projects Account or not ?</strong>
+      <br />
+  
+        <ul style="margin:15px 0px 0px 0px; padding:0px;">
+
+
+
+          <li>
+            <% if !@errors %>
+            <%= radio_button_tag ("yes", "yes",options = {:checked =>"true"}) %>
+            <% else %>
+             <%= radio_button_tag ("yes", "yes") %>
+            <%end%>
+            I do not have Original Projects Account, Please sign me up for a New Account
+          </li>
+          <li>
+            <% if !@errors %>
+            <%= radio_button_tag ("yes", "no") %>
+            <%else%>
+            <%= radio_button_tag ("yes", "no",options = {:checked =>"true"}) %>
+            <%end%>
+           I already have a Original Projects Account, Please link me to my existing account
+          </li>
+
+        </ul>
+     
+</div>
+      </div>
+
+
+
+<% if !@errors %>
+    <div id="existuser" style="display:none;" >
+      <% else %>
+      <div id="existuser"  >
+        <% end %>
+    <% if @errors.present? %>
+    <div id="errorExplanation" class="errorExplanation" style="width:400px;border:none;">
+      <h2>Sign In Failed</h2>
+      <ul>
+
+        <% @errors.each do |error| %>
+          <li><%= h(error) %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+      <% form_for :profile, :url => email_checklinkedin_update_passwords_url do |f| %>
+    <%=  hidden_field_tag(:member_id,request.cookies['window_name']) %>
+    <%= f.label:email, 'Email' ,:class=>"required"%>
+    <div class="input_frame">
+      <%= f.text_field(:email, :class => 'wide')  %>
+    </div>
+      <%=f.label :password_field, 'Password',:class=>"required" %>
+    <div class="input_frame">
+    <%= f.password_field(:password, :class => 'wide') %>
+    </div>
+
+    <%= f.submit "Submit" ,:class=>"submitbtnclass"%>
+        
+  <% end %>
+      </div>
+
+
+
+
+
+ 
+<% if !@errors %>
+
+     <div id="newuser" >
+       <% else %>
+   <div id="newuser" style="display:none;">
+     <%end%>
+<div style="float:left; width:710px;">
+  <h1>Sign Up</h1>
+    <%#*<div class="social" style="float:left;">Sign Up Using a <span class="fbColor">Facebook</span><br />%>
+    <%#*or <span class="linkedColor">Linked</span><span class="fbColor">In</span> Account</div>%>
+  <%#*<div class="clear"></div>%>
+    <p style="font-size:13px; color:#666666;"><span class="fbColor">Already social?</span> Sign Up to Original Projets with your Facebook<br />
+    or LinkedIn Account. <span class="fbColor">It's fast and easy.</span></p><br /><br />
+
+<div id="content">
+
+  <div class="column col_100">
+    <h1>Fill Out The Form Below</h1>
+
+    <% form_for :new_profile,@new_profile, :url => {:controller=>"profiles",:action=>"create"},:html=>{:id=> "new_profile"} do |form| -%>
+    <%=  hidden_field(:new_profile,:member_id,:value=>request.cookies['window_name']) %>
+    <%=  hidden_field(:new_profile,:network,:value=>"linkedin") %>
+      <div id="edit_profile">
+        <div class="box">
+          <%=form.label(:display_name,"Full name" ,:class=> "required1")%><div class="clear"></div>
+          <div class="input_frame">
+            <%= form.text_field(:display_name, :class => 'wide')  %>
+          </div>
+          <label class="error" style="display: none"for="new_profile_display_name" generated="true"></label></div>
+             <%#*<div class="box4">%>
+            <%#*<span class="validationMessage" style="display: block" id="new_profile_display_nameValidationMessage"></span></div><div class="clear"></div></div>%>
+
+        <%#*<div class="box">%>
+          <%#=form.label(:username,"Username" ,:class=> "required1")%>
+        <%#*<div class="clear"></div>%>
+          <%#*<div class="input_frame">%>
+            <%#= form.text_field(:username, :class => 'wide')  %>
+          <%#*</div>%>
+          <%#*<label class="error" style="display: none"for="new_profile_username" generated="true"></label><div class="clear"></div>%>
+          <%#*<div class="box4">%>
+            <%#*<span class="validationMessage" style="display: block" id="new_profile_usernameValidationMessage"></span></div><div class="clear"></div></div>%>
+        <br class="clear">
+        <div class="box">
+          <%=form.label(:email,"Email" ,:class=> "required1")%><div class="clear"></div>
+          <div class="input_frame">
+            <%= form.text_field(:email, :class => 'wide')  %>
+          </div>
+          <label class="error" style="display: none"for="new_profile_email" generated="true"></label></div>
+        <br class="clear">
+        <div class="box">
+          <%=form.label(:email_verification,"Email Confirmation" ,:class=> "required1")%><div class="clear"></div>
+          <div class="input_frame">
+            <%= form.text_field(:email_verification, :class => 'wide')  %>
+          </div>
+          <label class="error" style="display: none"for="new_profile_email_verification" generated="true"></label><div class="clear"></div></div>
+           <br class="clear">
+        <div class="box">
+          <div class="label_input_float">
+            <%= form.label :password,"Password",:class=>"required1" %><div class="clear"></div>
+            <div class="input_frame">
+              <%= form.password_field(:password, :class => 'short password_field') %>
+            </div>
+          </div>
+          <label class="error" style="display: none"for="new_profile_password" generated="true"></label><div class="clear"></div></div>
+        <br class="clear">
+        <div class="box">
+          <div class="label_input_float">
+            <%= form.label :password_confirmation,"Password Confirmation",:class=>"required1" %><div class="clear"></div>
+            <div class="input_frame">
+              <%= form.password_field(:password_confirmation, :class => 'short password_field') %>
+            </div>
+          </div>
+          <label class="error" style="display: none"for="new_profile_password_confirmation" generated="true"></label><div class="clear"></div></div>
+        <div class="clear"></div>
+        <div class="box2">
+          <div class="option_set">
+            <div class="option_box">
+              <ul>
+                <li>
+                  <label><%= check_box_tag(:tos_accepted) %>
+                    I accept the <%= link_to 'Terms of Use', tos_path, :target => 'blank' %></label></li>
+                <div class="er2"> <label class="error" style="display: none"for="tos_accepted" generated="true"></label></div>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div class="box2">
+          <div class="option_set">
+            <div class="option_box">
+              <ul>
+                <li>
+                  <!-- added newsletter column into profiles table -->
+                  <label><%= check_box_tag :newsletter,1,1 %>
+                    Please include me in Original Projects email updates! </label>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div class="box2">
+          <%= form.submit('Sign Up', :class => 'button') %>
+        </div>
+      </div><!-- closing #edit_profile -->
+    <% end -%>
+  </div>
+   </div>
+</div><!-- closing #content -->
+<% content_for :javascript do %>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+
+     $.validator.addMethod("DISPLYNAME", function(value, element) {
+    return this.optional(element) ||  /^[a-zA-Z\s]+$/i.test(value);
+    }, "Please enter a valid fullname.");
+    $("span.validationMessage:empty").hide();
+   
+      $("#new_profile").validate({
+        rules: {
+         "new_profile[display_name]": {
+          // remote:"/profiles/check_username"
+           required:true,
+         DISPLYNAME:"required DISPLAYNAME",
+          
+          },
+           "new_profile[email]": {
+            required: true,
+            email: true,
+           remote:"/profiles/check_email"
+          },
+          "new_profile[email_verification]": {
+           required: true,
+           equalTo: "#new_profile_email",
+            email: true,
+            remote:"/profiles/check_email"
+          },
+          "new_profile[password]": {
+            required: true,
+            minlength: 5
+          },
+          "new_profile[password_confirmation]": {
+            required: true,
+            minlength: 5,
+            equalTo: "#new_profile_password"
+          },
+         
+          tos_accepted:"required"
+        },
+        messages: {
+          "new_profile[display_name]": {
+          
+            required: "Please provide a full name",
+          },
+          "new_profile[password]": {
+            required: "Please provide a password",
+            minlength: "Your password must be at least 5 characters"
+          },
+          "new_profile[password_confirmation]": {
+            required: "Please provide a password",
+            minlength: "Your password must be at least 5 characters",
+            equalTo: "Please enter the same password as above"
+          },
+          "new_profile[email]": {
+            required:"Please enter a valid email address",
+            remote:"Email has already been taken"
+          },
+          "new_profile[email_verification]": {
+            required:"Please enter a valid email address",
+            equalTo: "Please enter the same email as above"
+           
+          },
+          tos_accepted: "Please accept the Terms of Use"
+        }
+      });
+
+       $("#yes_yes").click(function() {
+
+        $("#existuser").hide();
+        $("#newuser").show();
+
+    })
+
+     $("#yes_no").click(function() {
+
+        $("#newuser").hide();
+        $("#existuser").show();
+
+    })
+
+    });
+  </script>
+<% end %>
+</div>

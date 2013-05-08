@@ -1,0 +1,25 @@
+
+
+<h1>Send a message to <strong><%= @title%></strong></h1>
+
+<p><strong>Note:</strong> this message will appear as an email from your address.</p>
+
+<% form_for [message], :html => { :class => "message_form" } ,:url=>{:controller=>"networks",:action=> "create_message",:to_id=>params[:profile_id]} do |f| %>
+  <%= hidden_field_tag(:return_to, return_to) if return_to.present?%>
+  <p>
+    <%= f.label :subject, "Subject" %>
+    <%= f.text_field :subject, :class => "wide" ,:value =>""%>
+  </p>
+<%=  hidden_field_tag(:to_id,params[:to_id]) %>
+
+
+  <p>
+    <%= f.label :body, "Message" %>
+    <%= f.text_area :body, :rows => 5 %>
+  </p>
+
+  <div id="dynamic_recaptcha"></div>
+
+  <p><button type="submit" class="large">Send</button></p>
+<% end %>
+

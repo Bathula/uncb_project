@@ -1,0 +1,15 @@
+development:
+ username: originalprojects
+ password: hell0mailchimp
+ api_key: c0d8e1a5fd6db89021120c3c4c79125d-us1
+ send_goodbye: false
+ send_notify: false
+ double_opt: false
+ 
+ production:
+ username: originalprojects
+ password: hell0mailchimp
+ api_key: c0d8e1a5fd6db89021120c3c4c79125d-us1
+ send_goodbye: false
+ send_notify: false
+ double_opt: false

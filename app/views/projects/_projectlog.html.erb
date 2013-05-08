@@ -1,0 +1,21 @@
+<div id="overview" class="anchor" style="float: left; margin-top: 5px;">
+      <ul id="slideshow">
+        <% @project.images.each_with_index do |image, idx| %>
+          <li>
+            <%= image_tag image.attachment.url(:large) %>
+          </li>
+        <% end %>
+      </ul>
+
+      <% if @project.images.count > 1 %>
+        <div id="slideshow_controls">
+          <button id="slideshow_prev" title="prev">&lt;</button>
+
+          <button id="slideshow_next" title="next">&gt;</button>
+        </div>
+      <% end %>
+
+      <div id="project_description">
+        <%= auto_link_urls simple_format(s(@project.description)) %>
+      </div>
+    </div>

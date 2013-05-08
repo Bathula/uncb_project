@@ -1,0 +1,79 @@
+#tab_container ul.tabs {
+   border-bottom: solid 1px #ccc;
+   padding-bottom: 0px;
+   height: 36px;
+   list-style: none;
+   margin: 0px;	
+}
+
+#tab_container div.anchor {
+  clear: both;
+}
+
+ul.tabs li {
+   float: left;
+}
+
+ul.tabs a {
+   display: block;
+   height: 20px;
+   position: relative;
+   border-top: solid 1px #ccc;
+   border-right: solid 1px #ccc;	
+   padding: 12px; 
+   padding-top: 9px;
+   padding-bottom: 6px;
+   color: black;
+   text-decoration: none;
+   background: #eee;
+}
+
+#tab_container ul.tabs a:hover {
+   background: #f3f3f3;
+   color: #258ABA;
+}
+
+#tab_container ul.tabs li a.first {
+   border-left: solid 1px #ccc;	
+}
+
+#tab_container ul.tabs .tabs-selected a {
+   padding-bottom: 6px;
+   background: white;
+   color: black;
+   border-right: solid 1px #ccc;		
+   border-bottom: dotted 1px #ccc;
+}
+
+#tab_container ul.tabs a:focus,
+#tab_container ul.tabs a:active {
+   outline: none;
+}
+
+#tab_container ul.tabs .tabs-selected a:link,
+#tab_container ul.tabs .tabs-selected a:visited {
+   cursor: text;
+}
+
+#tab_container ul.tabs a:hover,
+#tab_container ul.tabs a:focus,
+#tab_container ul.tabs a:active {
+   cursor: pointer;
+}
+
+#tab_container .tab {
+   padding: 10px;
+}
+
+@media projection, screen {
+  /* Use class for showing/hiding tab content,
+  so that visibility can be better controlled in different media types... */
+  .tabs-hide {
+  display: none;
+}
+
+@media print {
+  /* Hide useless elements in print layouts... */
+  .tabs-nav {
+    display: none;
+}

@@ -1,0 +1,5 @@
+<p>Dear <%= @display_name %>,</p>
+<p>Thanks for joining Original Projects! You're almost ready to start originating, collaborating, and following projects. &nbsp;&nbsp;Please click the link below to activate your account:</p>
+<%= edit_profile_url(:perishable_token => @profile.perishable_token ,:email=> @profile.email)%>&nbsp;<br/>
+<p>Thanks!</p>
+<p>The Original Projects Team</p>

@@ -1,0 +1,44 @@
+
+ <div id="comments" class="anchor">
+
+      <% form_for [@project, Comment.new] do |f| %>
+        <div id="comment_form">
+          <%= f.text_area :content %>
+
+
+          <%if logged_in?%>
+
+
+          <button type="submit">Add Your Comments</button>
+
+        <%else%>
+                <p>
+    Please <%= link_to "Signin",login_path %> or <%= link_to "Signup",signup_url %> to Comment.
+
+    </p>
+    <%end%>
+
+        </div>
+      <% end %>
+
+      <% Activity.for_project(@project).latest(50).each do |activity| %>
+        <div class="activity_update">
+          <% if activity.profile.present? %>
+            <%= image_link_to_profile(activity.profile, :thumbnail) %>
+          <% elsif activity.project.present? %>
+            <%= image_link_to_project(activity.project, :thumbnail) %>
+          <% end %>
+
+          <% if activity.subject.is_a?(Comment) %>
+            <%= render :partial => "projects/comment", :locals => { :comment => activity.subject } %>
+          <% else %>
+            <p><%= activity_to_html(activity) %></p>
+
+            <p class="activity_date">
+              <%= display_date(activity.updated_at) %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>

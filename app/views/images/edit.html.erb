@@ -1,0 +1,113 @@
+<script src="/javascripts/jquery-tools.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.uploadify.v2.1.0.js" type="text/javascript"></script>
+<script src="/javascripts/swfobject.js" type="text/javascript"></script>
+
+
+
+  <%- session_key_name = ActionController::Base.session_options[:key] -%>
+  <%= javascript_tag "window._token = encodeURIComponent('#{form_authenticity_token}');" if ActionController::Base.allow_forgery_protection %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.upload_files').uploadify({
+          'uploader' : '/javascripts/uploadify.swf',
+          'script' : '<%= image_uploadify_project_url(@project) %>',
+          'fileDataName' : $(this).attr('name'),
+          'auto' : false,
+          'cancelImg' : '/images/cancel.png',
+          'method' : 'PUT',
+          'multi' : true,
+          'simUploadLimit' : '6',
+          'scriptData' : {
+                                'authenticity_token' : window._token,
+                                '_method' : 'PUT'
+                              },
+          'onAllComplete'   : function(event, data) { window.location.reload(); }
+      });
+    });
+  </script>
+<script>
+$(document).ready(function() {
+
+$("div.edititem").tooltip({ effect: 'fade'}).dynamic({ bottom: { direction: 'down', bounce: true } });
+});
+</script>
+
+<div id="content">
+  <div class="column col_100">
+       <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+<% 
+project = @project
+%>
+         <%if current_profile.is_originator?(project)%>
+    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+      <li class="ui-state-default ui-corner-top"><%= link_to "Details", edit_project_url(project), :class => "first" %></li>
+      <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><%= link_to "Media", edit_project_images_path(project) %></li>
+    </ul>
+         <%else%>
+          <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+      <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><%= link_to "Media", edit_project_images_path(project) %></li>
+    </ul>
+         <%end%>
+</div>
+<br />
+<h2>Manage Multimedia for <%= project.title %></h2>
+<br />
+ <h2>Images</h2>
+
+    <% form_for setup_with(@project, :images), :url => project_images_url(@project), :method => :put,
+      :html => { :multipart => true } do |form| -%>
+    <div class="input_frame" style="width:660px;">
+<div class="uploader">
+<div style="float:left;display:inline;margin-right:20px;color:#666666;width:200px;">
+<h2>Upload</h2>
+  Allowed File Types:<br />
+  <b>.jpg, .jpeg, .gif, .png</b><br />
+ </div>
+ <div style="float:left;display:inline;">
+    <%= form.file_field :attachment, :class => 'with_icon upload_files', :id => 'upload_files', :name => 'upload_files' %>
+    <br />
+  <a href="javascript:$('#upload_files').uploadifyUpload();">Upload Files</a> | <a href="javascript:$('#upload_files').uploadifyClearQueue();">Clear Queue</a>
+  <br />
+     
+  </div>
+  <div style="clear:both;"></div>
+  </div>
+      <div id="image_collection" style="display:block;">
+     <small>Mouseover image thumbnails below to delete and add / edit a description for each image.  Description will appear under the full-sized image in the pop-up on your project's page in the 'Media" tab.</small><br /><br />
+        <% form.fields_for :images do |image_form| %>
+          <%= render :partial => 'projects/image_form_media1', :locals => { :form => image_form } %>
+        <% end %>
+<% end %>
+        <div style="clear:both;"></div>
+      </div>
+
+    </div>
+    <h2>Video and other links</h2>
+    <div class="input_frame" style="width:660px;">
+      <div id="link_collection">
+      <small>Links to <a href="http://www.youtube.com">YouTube</a> and <a href="http://www.vimeo.com">Vimeo</a> videos will appear under "Video" in your project's "Media" tab with a thumbnail link, and the videos will pop-up in an embedded player.  Other links will appear in the "Links" section.<br /><br />
+      
+      </small>
+<% form_for setup_with(@project, :links), :url => project_url(@project), :method => :post do |form| -%>
+        <% form.fields_for :links do |link_form| %>
+          <%= render :partial => 'link_form', :locals => {:form => link_form} %>
+        <% end %>
+      </div>
+      <button id="add_link">Add Another Link</button><br />
+          <button class="large green" type="submit">Save</button>
+    </div>
+
+   <% content_for :javascript do %>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+      setupMultiFields('link', <%= generate_form_template(form, :link, :class_name => 'ProjectLink') %>);
+    });
+  </script>
+  <% end %>
+  
+
+    <% end -%>
+  </div>
+</div>
+
+

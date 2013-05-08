@@ -1,0 +1,24 @@
+<div class="image" style="margin-bottom:10px;width:346px;">
+  <% if form.object.new_record? %>
+    <%= form.file_field :attachment, :class => 'with_icon' %>
+  <% else %>
+
+    <div class="edititem">
+      <%= image_tag form.object.attachment.url(:thumbnail), :style=>'float:left;' %>
+ 
+    </div>
+    <div class="tooltip">
+      <%= image_tag form.object.attachment.url(:avatar),:class => 'project_image' %>
+    </div>
+
+
+
+    <div class="delete_image_field"style="display:block">
+      <%= form.check_box '_delete' %>
+      <%= form.label(:_delete, "Delete") %>
+    </div>
+
+
+  <% end %>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,13 @@
+
+<div id="content">
+  <%= render :partial => "join_form", :locals => { :return_to => params[:return_to]}%>
+</div>
+
+<%  content_for :javascript do %>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    Recaptcha.create(recaptcha_public_key, document.getElementById('dynamic_recaptcha'));
+  });
+</script>
+<%end%>

@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta name="description" content="<%#= yield(:meta_description) %>" />
+    <meta name="keywords" content="<%= yield(:meta_keywords) %>" />
+    <title>Original Projects - <%= yield(:page_title) %></title>
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    
+   
+    
+
+ <link href="/stylesheets/base_packaged.css" type="text/css" rel="stylesheet"/>
+ <%#*<script type="text/javascript" src="/javascripts/jquery.js"></script>%>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+ 
+   <script type="text/javascript" src="/javascripts/base_packaged.js"></script>
+
+  
+  
+   
+ 
+    <%#*<link href="/stylesheets/base_packaged.css" type="text/css" rel="stylesheet"/>%>
+    <%#*<script type="text/javascript" src="/javascripts/logged_in_only_packaged.js"></script>%>
+    <script type="text/javascript" src="/javascripts/project_page_packaged.js"></script>
+    <%#= stylesheet_link_merged :base, :media => :all %>
+    <%#= javascript_include_merged :base,"jquery.validate.js","jquery.valid8.js"%>
+    <%#= javascript_include_tag 'http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php' %>
+    <%#*<script type="text/javascript" src="/javascripts/mootools-1.2.4-core-yc.js"></script>%>
+    <%#*<script type="text/javascript" src="/javascripts/Quickie.js"></script>%>
+    <%#*<script type="text/javascript" src="/javascripts/jquery.rating.js"></script>%>
+    <%#*<script type="text/javascript" src="/javascripts/jquery.form.js"></script>%>
+    <%#*<script type="text/javascript" src="/javascripts/jquery.MetaData.js"></script>%>
+    <%#*<script type="text/javascript" src="/assests/project_page.js"></script>%>
+
+
+	
+        <%#*<script type="text/javascript" src="/javascripts/jquery.qtip.js"></script>%>
+		<%#*<link href="/stylesheets/jquery.rating.css" type="text/css" rel="stylesheet"/>%>
+		<%#*<link href="/stylesheets/jquery.qtip.css" type="text/css" rel="stylesheet"/>%>
+
+    <%#*<script type="text/javascript" src="http://platform.linkedin.com/in.js">%>
+     <%#*api_key: bYeMNd3dJO1d6-2VkDr5DwdfAwNgw4xjphuLa0Fsqv6uV2vnBrxq8G-9Ie-PE7nR%>
+     <%#*onLoad: onLinkedInLoad%>
+      <%#*</script>%>
+                
+
+    <%= yield(:head) %> <!--application.html.erb -->
+    <!--[if lt IE 7]>
+    <%#= javascript_include_merged :ie_fixes,"jquery-1.3.2.js","jquery.validate.js","jquery.valid8.js"%>
+     <%= javascript_include_merged :ie_fixes,"jquery.validate.js","jquery.valid8.js"%>
+    <![endif]-->
+    <!--[if IE]>
+    <object id="qt_event_source" classid="clsid:CB927D12-4FF7-4a9e-A169-56E4B8A75598" codebase="http://www.apple.com/qtactivex/qtplugin.cab#version=7,2,1,0"></object>
+    <![endif]-->
+<%#= javascript_include_merged :base %>
+    <% if logged_in? %>
+    <script type="text/javascript" src="/javascripts/logged_in_only_packaged.js"></script>
+
+      <%#= javascript_include_merged :logged_in_only %>
+    <% end %>
+
+    <%= yield :javascript %>
+
+     <script>
+   $(document).ready(function(){
+
+    if (navigator.appName!="Netscape")
+      {
+        alert("Important Notice: This site is more compatible with Safari, Google Chrome, Mozilla Firefox. Please avoid Internet Explorer!");
+      }
+
+});
+</script>
+    
+
+  </head>
+    <body class="<%= controller_name -%>_<%= action_name -%>">
+     
+    <%= render(:partial => 'layouts/header') %>
+    <%= yield :before_envelope %>
+    <% envelope do %>
+    <% if controller.controller_name.eql?('sessions') %>
+      <div id="main1">
+        <% else %>
+        <div id="main">
+        <%end%>
+        
+        <%= render(:partial => 'layouts/console_nav') if show_console? %>
+        <%unless controller.controller_name.eql?('accesses')%>
+          <%= render_messages %>
+        <%end%>
+        <%= yield %>
+      </div>
+        
+        <%#*==============side bars===============%>
+    <%#unless controller.controller_name.eql?('sessions')%>
+      <%= render_sidebar if show_sidebar? %>
+    <%#end%>
+
+
+
+
+
+    <% end %>
+    <div id="footer">
+      <p id="footer_copyright"><a href="/">Website &copy; <%= Time.now.strftime("%Y")%> Original Projects, Inc.</a></p>
+      <p id="footer_links">
+        <%= link_to "About", about_path %>
+        <%= link_to('Privacy Policy', :controller => 'home', :action => 'privacy') %>
+        <%= link_to("Terms of Use", tos_path) %>
+        <%= link_to("Developers", developers_path) %>
+        <%= link_to("Contact", contact_path) %>
+      </p>
+
+    </div>
+    <div id="bottom_space">&nbsp;</div>
+
+    <script type="text/javascript">
+      var recaptcha_public_key = "<%= ENV['RECAPTCHA_PUBLIC_KEY'] %>";
+    </script>
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-15677217-1");
+        pageTracker._trackPageview();
+      } catch(err) {}</script>
+
+    <%#= javascript_tag "window.api_key = '#{Facebooker.api_key}';" %>
+    <%#= javascript_tag "window.xd_receiver_location = '#{ENV['XD_RECEIVER_LOCATION']}';" %>
+    <%#= javascript_tag "window.facebook_authenticate_location = '#{ENV['FACEBOOK_AUTHENTICATE_LOCATION']}';" %>
+    <%#= javascript_include_tag 'facebook_require' %>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+ <%@keywords=''%>
+ <% @projects.each do |project| -%>
+ <%@keywords+=project.title+","%>
+ <%end%>
+<% content_for :meta_keywords,@keywords %>
+<% content_for :meta_description,'' %>
+
+  <div style="position:relative;  top:-30px; left:-30px; background-color:#35393c; width:740px; height:85px;">
+  <div style="float:left; background-color:#f9ec00; width:175px; height:55px; padding:30px 0px 0px 30px;">
+    <h1 style="font-weight:bold;">Projects</h1>
+  </div>
+  <div style="float:right;display:inline;padding:24px 40px 0px 0px;">
+    <ul class="yellowBox">
+      
+      
+        <li><a class="small_button rounded" style="margin-left:24px;" href="/projects/new">Start your Project &rarr;</a></li>
+     
+    </ul>
+  </div>
+  <div style="clear:both;"></div>
+
+</div>
+
+ <div class="column col_25" style="height:800px; margin-top:-20px;">
+    <div id="category_box" class="avatar_box_side" style="width:170px;padding:0px;overflow: scroll; height: 800px;">
+      <div class="avatar_box_side_title">
+        <h2>Categories</h2>
+      </div>
+      <ul class="service_categories">
+        <li>
+          <a href="/projects/?category=All" style="border-top:0px;"<% if params[:category] == "All" || !params[:category] || params[:category] == ""%> class="active"<% end %>>All</a>
+        </li>
+
+
+
+        <% @categories.each do |category| -%>
+          <li>
+            <a href="/projects/?sort=<%= params['sort'] %>&category=<%= category.id %>&page=1"<% if params[:category] == "#{category.id}" %> class="active"<% end %>><%= category.name %></a>
+          </li>
+        <% end -%>
+
+      </ul>
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+
+<div id="content" style="float:left; margin-top:-20px;">
+  
+ 
+  <div class="column_75">
+
+    <% @projects.each do |project| -%>
+      <%= render :partial => 'thumb', :locals => {:project => project, :originators => project.originators} %>
+    <% end -%>
+    <%if @projects.any?%>
+      <div>
+        <p><%=will_paginate @projects%></p>
+        <p>
+          <a href="#top"><span class="arrow">&#8593;</span> Top of page</a>
+        </p>
+      </div>
+    <%else%>
+  
+    <div style="float:left;padding:120px 0px 0px 130px;">
+      There are currently no Projects for this Category</div>
+    <%end%>
+  </div>
+</div>

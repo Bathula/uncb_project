@@ -1,0 +1,104 @@
+<div id="header">
+  <a id="top"></a>
+  <div id="logo" style="top:20px;">
+    <a href="/">
+      <%= image_tag "original_project.png", :alt => "Original Projects logo" %>
+    </a>
+  </div>
+
+  <div id="nav_top">
+    <ul>
+      <% if logged_in? -%>
+        <%=  link_to_section [:dashboard, current_profile.display_name], dashboard_url, :li, :id => 'nav_username' %>
+        <%if session[:login_type].eql?('facebook')%>
+          <li id="nav_sign_out"><a href="/logout_fb" onclick='FB.Connect.logoutAndRedirect("/logout")' >logout</a></li>
+<%= link_to_section ["Activity", "Activity"], root_path, :li %>
+        <%elsif session[:login_type].eql?('linkedin')%>
+          <li id="nav_sign_out"><a href="#" id="signoutlink">sign out</a></li>
+
+        <%else%>
+          <%if session[:login_type].eql?('normal')or logged_in?%>
+            <li id="nav_sign_out"><%= link_to "sign out", logout_path, :method => :delete %></li>
+
+    <%end%>
+          <%= link_to_section ["Activity", "Activity"], root_path, :li %>
+        <%end%>
+
+
+
+
+
+  <!--<li id="nav_sign_out"><%= link_to "store", "http://mccullough-and-sons2791.myshopify.com/",:target =>"_blank"%></li>-->
+        <%= link_to_section ["Projects", "Projects"], projects_path, :li %>
+  <%#= link_to_section ["services", "services"], services_path, :li %>
+  <%#= link_to_section ["services", "services"], services_path, :li %>
+      <% else -%>
+        <% if !session[:login_type].eql?('linkedin')    %>
+          <% if !session[:login_type].eql?('facebook') %>
+            <%= link_to_section "sign in", login_path, :li %>
+            <%= link_to_section "sign up", signup_url, :li %>
+          <%end %>
+        <%end%>
+
+
+        <% if session[:login_type].eql?('linkedin') %>
+
+          <li id="nav_sign_out"><a href="#" id="signoutlinkedin">sign out</a></li>
+        <%end%>
+        <% if session[:login_type].eql?('facebook') %>
+          <li id="nav_sign_out"><a href="/logout_fb" onclick='FB.Connect.logoutAndRedirect("/logout")' >sign out</a></li>
+        <%end%>
+        <%= link_to_section ["Projects", "Projects"], projects_path, :li %>
+  <%#= link_to_section ["services", "services"], services_path, :li %>
+      <% end %>
+      <%= link_to_section "How it works", tour_path, :li %>
+    </ul>
+  </div>
+</div>
+<script type="text/javascript">
+  //$.noConflict();
+  $(document).ready(function(){
+    $("#signoutlink").click(function(){
+              
+                    
+                   
+      window.location.href="http://www.originalprojects.com/logout";
+      var url = "https://www.linkedin.com/secure/login?session_full_logout=&trk=hb_signout"
+
+
+
+      $.getJSON(url + "&jsoncallback=?", function(data){
+        //IN.User.logout();
+
+
+
+      })
+    })
+
+    $("#signoutlinkedin").click(function(){
+
+
+
+      window.location.href="http://www.originalprojects.com/passwords/delete_linkedin";
+      var url = "https://www.linkedin.com/secure/login?session_full_logout=&trk=hb_signout"
+
+
+
+      $.getJSON(url + "&jsoncallback=?", function(data){
+        //IN.User.logout();
+
+
+
+      })
+
+
+
+
+
+
+
+
+    });
+  });
+
+</script>

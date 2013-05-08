@@ -1,0 +1,136 @@
+<% content_for :page_title, "Dashboard" %>
+
+<div id="content">
+
+  <div class="column col_100">
+
+      <div id="user_info_box" style="height:155px;">
+        <div style="float:left; width:400px;">
+        <div id="user_avatar" class="gray_box rounded">
+          <%= image_link_to_profile(current_profile, :small) %>
+        </div>
+        <h1 style="margin:0px; padding:0px;">
+          <%= current_profile.display_name %>
+          <span class="related_action smaller">[<%= link_to "edit", edit_profile_path %>]</span>
+        </h1>
+
+      <p class="larger" style="margin:0px; padding:0px; height:35px;">
+        <%= current_profile.location %> <%= current_profile.country %>
+      </p>
+      <div style="line-height: 18px; display: table; padding-top:3px;">
+        <%= link_to "You've Originated #{pluralize(@projects[:originated].size, 'project')}", my_projects_url(:anchor => "originated") %>
+        <br />
+        <%= link_to "You're a Member of #{pluralize(@projects[:collaborating].size, 'project')}", my_projects_url(:anchor => "collaborating") %>
+        <br />
+        <%= link_to "You're Following #{pluralize(@projects[:following].size, 'project')}", my_projects_url(:anchor => "following") %>
+        <br/>
+        <span style="float:left; padding-top:10px;">
+        <%= link_to "You've setup #{pluralize(current_profile.services.size,'service')}",my_services_url(:anchor => "originated")%></span>
+     
+      </div>
+        </div>
+
+        <div style="float:left; width:200px;">
+<%# if  current_profile.membership_requests.present?%>
+
+ <h1>Requests</h1>
+ <p>
+ <%@requests.slice(0..4).each do |project|%>
+  <%@req=project.membership_requests.count%>
+ <% if @req > 1 %>
+   <% @c1=1 %>
+        <%= link_to "You've #{@req} requests", project_members_path(project) %> for your <%= link_to truncate(project.title, :length => 11), project_path(project) %><br />
+  <%else if @req==1%>
+     
+
+        <% @c1=1 %>
+       <%= link_to "You've #{@req} request", project_members_path(project) %> for your <%= link_to project.title, project_path(project) %><br />
+
+     <%else%>
+       <% @c=0 %>
+      
+    <%end%>
+    <%end%>
+
+
+<%end%>
+
+
+
+ <% if !@c1 %>
+  <%= link_to "No pending requests" %>
+ <%end%>
+    <%if @requests.count > 5 %>
+        <%=link_to "(more)", my_projects_path%>
+ <%end%>
+
+
+<%#end%></p>
+        </div>
+        <div class="clear"></div>
+
+
+    </div><!-- closing #user_info_box -->
+  </div><!-- closing col_100-->
+
+  <div class="column col_30">
+    <div id="project_listing">
+      <a class="large_button" href="projects/new/">Start a New Project &rarr;</a>
+      <% if @projects[:originated].any? %>
+        <h2>Projects I've Originated</h2>
+        <%= render :partial => "project", :collection => @projects[:originated][0,3] %>
+        <p class="show_all"><%= link_to "Show All &raquo;", my_projects_url(:anchor => "originated") %></p>
+      <% end %>
+
+      <% if @projects[:collaborating].any? %>
+        <h2>Projects I'm Collaborating On</h2>
+        <%= render :partial => "project", :collection => @projects[:collaborating][0,3] %>
+        <p class="show_all"><%= link_to "Show All &raquo;", my_projects_url(:anchor => "collaborating") %></p>
+      <% end %>
+
+      <% if @projects[:following].any? %>
+        <h2>Projects I'm Following</h2>
+        <%= render :partial => "project", :collection => @projects[:following][0,3] %>
+        <p class="show_all"><%= link_to "Show All &raquo;", my_projects_url(:anchor => "following") %></p>
+      <% end %>
+    </div><!-- closing project_listing -->
+  </div><!-- closing col_30 -->
+
+  <div class="column col_70">
+    <div id="activity_feed">
+      <h2>My Activity Feed</h2>
+      <ul>
+        <% if @activity.present? %>
+          <% @activity.each do |activity| %>
+            <li style="background:<%= cycle("#ffffff", "#EAF5F9") %>;padding:9px 4px 9px 6px;margin:0px;">
+              <%if activity.subject_type=="Service"%>
+                  <%= link_to(image_tag(activity.subject.avatar.url(:thumbnail), :alt => activity.subject.title), activity.subject) %>
+                <%else%>
+                  <%#if !activity.subject_type=="Service"%>
+                    <%= link_to(image_tag(activity.project.avatar.url(:thumbnail), :alt => activity.project.title), activity.project) %>
+                  <%end%>
+
+
+
+
+
+             <%#= link_to(image_tag(activity.project.avatar.url(:thumbnail), :alt => activity.project.title), activity.project) %>
+              <%#= image_tag activity.project.avatar.url(:thumbnail) %>
+              <%= activity_to_html(activity) %><br />
+              <span class="gray"><%= display_date(activity.updated_at) %></span>
+            </li>
+           
+          <% end %>
+             <div id="pagination" style="margin-top: 10px;"><%= will_paginate @activity %></div>
+        <% else %>
+            <div class="message notice">
+              <p>You are following Original Projects, Inc.  After you originate, collaborate, and/or follow more projects you will receive activity updates on those projects.</p>
+       
+            </div>
+        <% end %>
+      </ul>
+    </div><!-- closing activity_feed -->
+  </div><!-- closing col_70 -->
+
+
+</div><!-- closing #content -->

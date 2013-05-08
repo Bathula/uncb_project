@@ -1,0 +1,56 @@
+
+  <link rel="alternate" type="application/atom+xml" title=" Recent Activity" href=""/>
+
+
+
+<div id="content">
+
+<%= render :partial => "shared/inbox_sidebar" %>
+<!-- closing left column -->
+
+   <div class="column col_70">
+
+    <h1 class="top" style="padding-top: 10px;">Message List</h1>
+
+    <div id="activity_feed"></div>
+    
+    <% @imessages.each do |m| %>
+
+    <!-- <div id="imessage_update_top" class="activity_update_row" style="background: yellow;"> -->
+      <div class="inbox_container" style="border: 1px solid;border-collapse: collapse; border-color: #cccccc; padding: 10px; margin: 0;">
+        <div id="inbox-col-1" style="float: left; margin-right: 5px; width: 40px;"
+          <%if !m.profile.avatar.nil? && m.profile.active?%>
+              <%= link_to(image_tag(m.profile.avatar.url(:thumbnail)), m.profile) %>
+          <%else%>
+              <%= link_to(image_tag('default/thumbnail_op-default-avatar.jpg')) %>
+          <%end%>
+        </div><!-- #inbox col 1 -->
+        <div id="inbox-col-2" style="float: left; width: 100px; margin-right: 5px;">
+          <ul style="list-style-type:none;">
+            <li style="font-size: 1.2em; font-weight: bold; margin-bottom: 2px;"><%= link_to m.profile.username, m.profile %></li>
+            <li style="font-size: 0.9em;"><%= m.created_at.to_s(:short) %></li>
+          </ul>
+        </div><!-- #inbox col 2 -->
+        <div id="inbox-col-3" style="float: left; width: 255px; margin-right: 10px;">
+          <ul style="list-style-type:none;">
+            <li style="font-size: 1.2em; font-weight: bold;"><%= link_to m.subject, :controller => :inboxes, :action => :show_message, :id => m %></li>
+            <li style="font-size: 1em; color: black;"><%=  truncate(m.content, 40, "...") %></li>
+          </ul>
+        </div><!-- #inbox col 3 -->
+        <div id="inbox-col-4" style="float: left;width: 15px; padding-top: 25px;">
+          <a href="#" style="text-decoration: none;"><span>X</span></a>
+        </div><!-- #inbox col 4 -->
+        <div style="float: none; clear: both;"></div>
+
+      </div><!-- .inbox container -->
+   <!-- </div> -->
+<% end %>
+
+<div id="pagination" style="margin-top: 10px;"><%= will_paginate @imessages %></div>
+   
+
+</div>
+</div>
+ 
+
+<!-- <%= link_to 'New inbox', new_inbox_path %> -->

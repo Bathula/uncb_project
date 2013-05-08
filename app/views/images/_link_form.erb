@@ -1,0 +1,11 @@
+<div class="link">      
+  <%= form.text_field :url, :class => 'with_icon' %>
+  <% unless form.object.new_record? %>
+        <%if current_profile.is_originator?(@project)%>
+  <div class="delete_link_field">
+            <%= form.check_box '_destroy' %>
+      <%= form.label(:_destroy, "Delete") %>
+           </div>
+  <% end %>
+   <% end %>
+</div>

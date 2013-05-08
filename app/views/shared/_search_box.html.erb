@@ -1,0 +1,10 @@
+<div class="module search">
+  <% form_tag search_url, :method => :get do %>
+  
+    <div id="search_box">
+      <%= text_field_tag "q", "search", :class => "search_terms", :style=>"margin-top:0px;" %>
+      <%= submit_tag "", :name => nil, :class => "search_button", :style=>"margin-bottom:0px;" %>
+      <br class="clear" />
+    </div>
+  <% end %>
+</div>

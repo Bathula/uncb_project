@@ -1,0 +1,46 @@
+<% if service -%>
+<div class="service_container" style="border: 1px solid;border-color: #cccccc;">
+  <div style="float:left; width:140px;">
+  <%= link_to(image_tag(service.avatar.url(:small), :class => 'border',:width => '110px',:height => '110px'), service_path(service), :class => 'img_link',:style=>"padding-bottom:0px;") -%>
+ 
+  
+
+  
+  <%if logged_in?  &&  !Network.find(:all,:conditions=>['profile_id=? AND status=?',current_profile.id,1]).collect(&:member_id).include?(service.id) && !current_profile.originated_services.include?(service)%>
+<span  style="position:relative; top:0px; left:0px;">
+    <%#=link_to(image_tag('/images/add_to_network.png' ),networks_path(:member_id => "#{service.originators.collect(&:id).join(":")}"), :method => :post)%>
+  <%=link_to(image_tag('/images/add_to_network.png' ),networks_path(:member_id => "#{service.id}", :type=>"service"),:method => :post)%>
+</span>
+  <%else%>
+  <%if logged_in?%>
+  <%if Network.find(:all,:conditions=>['profile_id=? AND status=?',current_profile.id,1]).collect(&:member_id).include?(service.id) %>
+
+    <%=link_to(image_tag('/images/btn_in_network_small.gif' ),delete_networks_path(:member_id => "#{service.id}"), :method => :delete,:confirm=>"Are you sure you want to delete this contact to your network.")%>
+    <%end%>
+    <%else%>
+<span style="float:left; width:110px; text-align:center;">
+
+</span>
+    <%end%>
+
+  <% end  %>
+</div>
+
+
+	<div class="service_info" >
+	 <h2 style="padding-top:0px; line-height:1.1em;">
+      <%= link_to truncate(service.title, :length => 40), service_path( service ) -%>
+      </h2>
+      <p style="margin-bottom:5px; height:35px;"><%= truncate(service.short_description, :length => 110)%><% if service.short_description.length > 110 %> <%=link_to "More",service_path(service)%><%end%></p>
+  <span style="padding-top:5px; line-height:17px;">
+  <%if service.profiles.count > 1%> <strong>Service Owners: </strong><%= service.profiles.map(&:display_name).to_sentence %>
+         <%else%>
+    <strong>Service Owner: </strong><%= service.profiles.map(&:display_name) %>
+      <%end%><br/>
+     <strong>Category: </strong> <%= service.category.name %><br/>
+     <strong>Location: </strong> <%= service.location %></span>
+     
+       
+	</div>
+ </div>
+<% end -%>

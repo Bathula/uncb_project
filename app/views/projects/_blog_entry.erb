@@ -1,0 +1,52 @@
+<div id="blogcontent" class="activity_blog_entry">
+  <%= image_link_to_profile(blog_entry.profile, :thumbnail) %>&nbsp;&nbsp;&nbsp;&nbsp;
+ by <%= link_to blog_entry.profile.name, blog_entry.profile %> on   <%= display_date(blog_entry.updated_at) %>
+  <p>
+  <h3><%= blog_entry.title %></h3>
+</p>
+
+<p>
+  <%= blog_entry.content %>
+  </p>
+  <div style="clear:both"></div>
+<br />
+  <p class="activity_date">
+  
+   <%if logged_in?%>
+    <%= link_to "Comment", "#", :class => "reply_toggle" %>
+  <%else%>
+     <p>
+    Please <%= link_to "Signin",login_path %> or <%= link_to "Signup",signup_url %> to Comment.
+    </p>
+    <%end%>
+  </p>
+
+  <div class="replies">
+    <% if blog_entry.remarks.present? %>
+      <ul>
+      <% blog_entry.remarks.each do |remark| %>
+        <li>
+          <%= image_link_to_profile remark.profile, :thumbnail %>
+          <p>
+            <strong><%= s remark.profile.name %>:</strong>
+            <%= s remark.content %>
+          </p>
+          <p class="date"><%= display_date(remark.updated_at) %></p>
+        </li>
+      <% end %>
+      </ul>
+    <% end %>
+
+    <% form_for [blog_entry.project, blog_entry, Remark.new], :id => "new_reply_#{blog_entry.id}" do |f| %>
+      <%= f.text_area :content, :rows => 5 %>
+    <%if logged_in?%>
+      <button type="submit">Comment</button>
+      <%else%>
+        <p>
+    Please <%= link_to "Signin",login_path %> or <%= link_to "Signup",signup_url %> to Comment.
+
+    </p>
+  <%end%>
+    <% end %>
+  </div>
+</div>

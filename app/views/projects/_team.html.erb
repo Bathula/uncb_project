@@ -1,0 +1,17 @@
+<div id="team" class="anchor">
+
+      <h2>Originators</h2>
+
+      <% @project.originators.each do |profile| %>
+        <%= render :partial => 'profile_box', :locals => {:profile => profile} %>
+      <% end %>
+
+      <% if @project.members.count > 0 %>
+        <h2>Team Members</h2>
+         <input type="hidden" id="team_members" value="1">
+        <% @members.each do |profile| %>
+          <%= render :partial => 'profile_box', :locals => {:profile => profile} %>
+        <% end %>
+        <div id="pagination" style="margin-top: 10px;"><%= will_paginate @members %></div>
+      <% end %>
+    </div>

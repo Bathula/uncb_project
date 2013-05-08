@@ -1,0 +1,22 @@
+<div id="blog" class="anchor">
+    <% if logged_in? %>
+      <% if current_profile.is_originator?(@project) %>
+        <p>
+          <%= link_to "Add New Blog Entry", new_project_blog_entry_url(@project) %>
+        </p>
+      <% end -%>
+      <% end %>
+      <% if @project.blog_entries.present? %>
+        <ul>
+          <%= render :partial => "projects/blog_entry", :collection => @project.blog_entries.all(:limit => 5) %>
+        </ul>
+        <%else%>
+        No blogs have been added yet.
+      <% end %>
+
+      <% if @project.blog_entries.count > 5 %>
+        <p><%= link_to "Show All Blog Entries", project_blog_entries_url(@project),
+                       :class => "show_all_blog_entries" %></p>
+      <% end %>
+
+    </div>

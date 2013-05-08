@@ -1,0 +1,8 @@
+<div class="profile_preview gray_box rounded">
+  <%= link_to image_tag(service.avatar.url(:square_60), :height => 60, :width => 60), service, :class => "img_link left" %>
+  <div class="project_info">
+    <h3><%= link_to service.title, service %></h3>
+    <p class="dark_gray"><strong>Originated:</strong> <%= service.created_at.strftime("%B %d, %Y") %><br/>
+    <strong>Updated:</strong> <%= service.updated_at.strftime("%B %d, %Y") %></p>
+  </div>
+</div>

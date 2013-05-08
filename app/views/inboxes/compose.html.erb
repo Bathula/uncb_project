@@ -1,0 +1,177 @@
+ <%#=javascript_include_tag 'application'%>
+<% content_for :page_title, "Compose Message" %>
+<div id="content">
+  <%= render :partial => "shared/inbox_sidebar" %>
+  <br>
+  <div class="column col_70">
+    <div id="abc"> </div>
+    <h1 class="top" style="margin-top:-33px;">Compose Message </h1>
+     <% form_for :message,@message, :html => { :multipart => true,:id=>"compose_msg" }, :builder => OriginalProjects::FormBuilder ,:url=> {:controller=>"inboxes",:action =>"create"} do |f| %>
+     
+    <label for="imessage_to_id" class="required" id="to_label">To</label><br>
+      <div class="input_frame" id="todiv" style="margin-bottom:15px;">
+       
+<%if  params[:type].eql?("service") %>
+
+       
+    <span class="lftNormal"><span><%=@profiles.collect(&:display_name)%><a class="remove" href="javascript:" id="<%=@profiles.collect(&:id)%>" title="Remove <%=@profiles.collect(&:display_name)%>">x</a></span></span>
+
+
+    <%end%>
+    <%if  params[:type].eql?("project")%>
+    <%@profiles.each do |profile|%>
+    <span class="lftNormal"><span><%=profile.display_name%><a class="remove" id="<%=@profiles.collect(&:id)%>" href="javascript:" title="Remove <%=profile.display_name%>">x</a></span></span>
+    <%end%>
+    <%end%>
+    
+    <input type="text" size="30" name="imessage[to_id]" id="imessage_to_id" class="text_field required ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="margin:0px 0px 10px 0px;" />
+    
+<p class="small_note">Please input a full name.</p>
+</div>
+    
+  <label for="message_subject" class="required" id="subject_label">Subject</label>
+  <br>
+  <div class="input_frame" style="margin-bottom:15px;">
+    <input type="text" style="margin: 0px 0px 10px;" size="30" name="message[subject]" id="message_subject" class="text_field required">
+  </div>
+    
+  <label for="message_body" class="required" id="msg_label">Content</label>
+  <br>
+    <div class="input_frame" style="margin-bottom:15px;">
+      <textarea style="width: 353px; margin: 0px 0px 10px;" rows="12" name="message[body]" id="message_body" cols="40" class="text_area required"></textarea>
+    </div>
+   
+    <%if params[:type].eql?("service")%>
+      <input type="hidden" value="nil:<%=@profiles.collect(&:id)%>" id="uids" name='uids' />
+      <%elsif params[:type].eql?("project")%>
+      <%@profile_ids=""%>
+      <%@profiles.each do |profile|%>
+      <%@profile_ids=@profile_ids+profile.id.to_s+":"%>
+      <%end%>
+      <input type="hidden" value="nil:<%=@profile_ids%>" id="uids" name='uids' />
+      <%else%>
+      <input type="hidden" value="nil" id="uids" name='uids' />
+      <%end%>
+
+ <label class="required">Add Attachments</label>
+      <br/>
+      <div class="input_frame">
+        <p class="small_note">You can attach up to 5 files at a time.<br/>
+              </p>
+        <%# if @imessage.errors.on("images.attachment").present? -%>
+          <%#*<p class="error">%>
+            <%#*You attempted to upload a disallowed file type. JPG, GIF, and PNG formats are accepted.%>
+          <%#*</p>%>
+        <%# end -%>
+        <div id="image_collection">
+          <div class="image" style="margin-bottom:10px;">
+           <input type="file" size="30" name="attachment[]" id="attachment">
+            <div class="clear"></div>
+          </div>
+        
+          <%# f.fields_for :images do |image_form| %>
+            <%#= render :partial => 'image_form', :locals => {:form => image_form} %>
+          <%# end %>
+        </div>
+        <button id="add_image" onclick="return add_more_images();">Add More Attachments</button>
+      
+     
+      </div>
+
+      <%#=image_submit_tag("button-send.gif", :disable_with => "Signing In...")%>
+      
+ <button id="add_image" onclick="return validate_compose_form();">Send</button>
+     
+      
+      
+    <% end %>
+  
+  </div>
+</div>
+
+<script type="text/javascript">
+   var upload_image_count=1;
+  function validate_compose_form()
+  {
+    var valid=true;
+    var div_id=document.getElementById('todiv');
+    var spanele=div_id.childNodes[1];
+   
+ if(spanele.nodeName!="SPAN")
+   {
+
+
+   document.getElementById('to_label').innerHTML="To <span style='color:red'>can't be blank</span>";
+
+
+   valid=false;
+   }
+   else
+     {
+
+        document.getElementById('to_label').innerHTML="To";
+     }
+
+    if(document.getElementById('message_subject').value=="")
+   {
+
+   
+  document.getElementById('subject_label').innerHTML="Subject <span style='color:red'>can't be blank</span>";
+   
+
+   valid=false;
+   }
+   else
+     {
+         document.getElementById('subject_label').innerHTML="Subject";
+     }
+    if(document.getElementById('message_body').value=="")
+   {
+//alert(div_id.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling);
+   
+   document.getElementById('msg_label').innerHTML="Content <span style='color:red'>can't be blank</span>";
+   
+
+   valid=false;
+   }
+   else
+     {
+        document.getElementById('msg_label').innerHTML="Content";
+     }
+
+return valid;
+
+  }
+  function add_more_images()
+  {
+    if(upload_image_count < 5)
+     {
+   var attachments_data=document.getElementById('image_collection').innerHTML;
+   var div_node=document.createElement('div');
+   div_node.setAttribute('class', 'image');
+   div_node.setAttribute('style','margin-bottom:10px;');
+   div_node.innerHTML='<input type="file" size="30" name="attachment[]" id="upload_attachment"><div class="clear"></div>';
+  // var new_attachment='<div class="image" style="margin-bottom:10px;"></div>';
+  //document.getElementById('image_collection').innerHTML=attachments_data+new_attachment;
+  document.getElementById('image_collection').appendChild(div_node);
+  upload_image_count=upload_image_count+1;
+  return false;
+     }
+     else
+       {
+         return false;
+       }
+  }
+
+
+
+  <%if  params[:type].eql?("service")%>
+    
+    user_names.push("<%=@profiles.collect(&:display_name)%>");
+    <%end%>
+       <%if  params[:type].eql?("project")%>
+          <%@profiles.each do |profile|%>
+    user_names.push("<%=profile.display_name%>");
+    <%end%>
+    <%end%>
+</script>

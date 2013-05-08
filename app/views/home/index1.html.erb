@@ -1,0 +1,207 @@
+<!-- test -->
+
+<style type="text/css">
+ #li_ui_li_gen_2 #li_ui_li_gen_2-title
+ {
+   display:none;
+}
+  </style>
+
+<% content_for :page_title, 'The place to share and cultivate your original projects' %>
+<script type="text/javascript">
+
+
+function onLinkedInLoad() {
+
+     
+
+        var m = $("#linkedin");
+
+        var m1=m.children("span");
+        var m2=m1.children("span").children("span").children("a").children("span :last-child").hide();
+
+
+
+ }
+
+
+
+function onLinkedInAuth() {
+  IN.API.Profile("me")
+    .result( function(me) {
+      var id = me.values[0].id;
+      var first_name = me.values[0].firstName;
+      var last_name = me.values[0].lastName;
+     document.cookie = "window_name="+id;
+
+       if (id)
+
+           window.location.replace("http://originalprojects.com/passwords/email_linkedin");
+
+
+
+    });
+}
+</script>
+
+
+
+
+
+
+
+
+<% unless logged_in? %>
+  <div id="home_blurb">
+    <h1>The place to share and cultivate your original projects.</h1>
+  </div>
+<% end %>
+
+<% unless logged_in? %>
+  <div id="home_sign_in" class="rounded gray_box">
+    <% form_for :profile_session, :url => session_path do |form| %>
+      <div>
+        <div class="left">
+          <label for="username">Email</label><br/>
+          <%= form.text_field :email, :value => '' %><br/>
+        </div>
+        <div class="left">
+          <label for="password">Password</label><br/>
+          <%= form.password_field :password, :value => '', :class => "password_field" %><br/>
+        </div>
+        <button type="submit" class="left">Sign In</button>
+      </div>
+     <div style="float:left; padding-right:53px;">
+        <a href="forgot_password">Password Help</a>
+     </div>
+    <div style="float:left;">
+          <div style="float:left; padding-top:1px;"> <%= fb_connect_javascript_tag %>
+<%= init_fb_connect "XFBML",:js=>'jquery'%>
+
+            
+<%= fb_login_and_redirect(email_entry_url, :length => "short", :size => "small") %></div>
+      <% end %>
+    
+<div id="linkedin" style="float:left; padding-left:8px;">
+<script type="IN/Login" data-onAuth="onLinkedInAuth"></script></div>
+</div></div>
+  <br class="clear" />
+<p class="promo_link">Ready to get started? <%= link_to "Learn more", tour_path %> about how it works and <%= link_to "sign up.", signup_url %></p>
+
+  <div id="homepage_screenshots">
+    <div><img src="/images/featured/homepage/home-screenshot-1.jpg" alt="Blog About Your Projects">
+       <h2>Bring Ideas To Life</h2>
+       <p>Transform the ideas that inspire you into original projects. Cultivate them.</p>
+    </div>
+    <div><img src="/images/featured/homepage/home-screenshot-2.jpg" alt="Blog About Your Projects">
+        <h2>Find Your Niche</h2>
+        <p>Connect with others, not based on who you are, but what you do&#8212;and aspire to do.</p>
+     </div>
+     <div><img src="/images/featured/homepage/home-screenshot-3.jpg" alt="Connect ">
+         <h2>Work Together</h2>
+         <p>Share resources, whether money, time, knowledge, or experience. Help others.</p>
+      </div>
+      <div class="no_margin"><img src="/images/featured/homepage/home-screenshot-4.jpg">
+          <h2>Share Your Story</h2>
+          <p>Let the whole world (or just your chosen few) watch as your dream project unfolds.</p>
+       </div>
+       <br class="clear" />
+  </div><!-- closing #homepage_screenshots -->
+
+  <div id="homepage_featured">
+<% Project.visible.by_title.featured.sort_by { rand }.first(3).each_with_index do |project, index| -%>
+      <div <% if (index == 0) %>class="no_margin"<% end %>>
+
+        <%= link_to(image_tag(project.avatar.url(:feature), :alt => project.title), project) %>
+        <h2><%= link_to_project(project, project.title) %></h2>
+        <p class="dark_gray"><%= project.opdescription -%></p>
+      </div>
+      <% end %>
+  </div>
+
+
+    <br class="clear" />
+    <p>These are just a few of the projects on Original Projects. You can browse <%= link_to "projects", projects_path %> on the site to view more.</p>
+  </div><!-- closing #homepage_featured -->
+
+</div>
+
+<% content_for :javascript do %>
+<%= javascript_include_tag "flowplayer-3.1.4.min" %>
+<% end %>
+<% end %>
+
+
+
+
+
+
+  <% if logged_in? %>
+  <div class="column col_70" style="width:520px;float:left;">
+    <div id="activity_feed">
+      <br />
+      <h2>Sitewide Activity Feed</h2>
+      <br />
+      <ul>
+        <%@public=Project.public%>
+        <%@act1 = Activity.find(:all,:conditions=>['project_id IN(?) OR project_id IS NULL',@public],:order => "created_at DESC",:limit => 400)%>
+
+    <%@act2 = Activity.find(:all,:conditions=>['project_id IN(?) AND subject_type=?',@public,"MembershipRequest"],:order => "created_at DESC",:limit => 400)%>
+ 
+   <%
+        page = params[:page] || 1
+        @activity = (@act1-@act2).paginate :page => params[:page],:order => "created_at DESC", :per_page => 23, :limit => 400
+      %>   
+        <% @activity.each  do |activity| %>
+   
+          <li style="background:<%= cycle("#ffffff", "#EAF5F9") %>;padding:9px 4px 9px 6px;margin:0px;">
+            <%if activity.project_id.nil? && activity.profile_id.nil?%>
+              <%if activity.subject_type=="Attachment"%>
+            <%if !activity.subject.nil?%>
+                         <%= link_to(image_tag(activity.subject.attachable.avatar.url(:thumbnail)), activity.subject.attachable) %>
+             <%end%>
+              <%end%>
+            <%end%>
+
+            <%if activity.project_id.nil? && !activity.profile_id.nil?%>
+              <%if !activity.profile.avatar.nil? && activity.profile.active?%>
+                <%= link_to(image_tag(activity.profile.avatar.url(:thumbnail)), activity.profile) %>
+
+              <%else%>
+                <%= link_to(image_tag('default/thumbnail_op-default-avatar.jpg')) %>
+              <%end%>
+              <%=link_to_profile(activity.profile)%> just signed up for Original Projects community.<br />
+              <span class="gray"><%= display_date(activity.profile.created_at) %></span>
+            <%else%>
+              <%if !activity.project.nil? %>
+                <%if activity.subject_type=="Service"%>
+                  <%= link_to(image_tag(activity.subject.avatar.url(:thumbnail), :alt => activity.subject.title), activity.subject) %>
+                <%else%>
+                  <%if !activity.subject_type=="Service"%>
+                    <%= link_to(image_tag(activity.project.avatar.url(:thumbnail), :alt => activity.project.title), activity.project) %>
+                  <%end%>
+                  <%= link_to(image_tag(activity.project.avatar.url(:thumbnail), :alt => activity.project.title), activity.project) %>
+                <%end%>
+              <%end%>
+              <%= activity_to_html(activity) %><br />
+              <span class="gray"><%= display_date(activity.updated_at) %></span>
+            </li>
+          <%end%>
+        <%end%>
+        <br /><br />
+        <p><%= will_paginate @activity %></p>
+      </ul>
+    </div><!-- closing activity_feed -->
+  </div><!-- closing col_70 -->
+  <div style="width:332px;float:left;">
+
+    <br />
+    <h2>Newest Projects</h2>
+    <br />
+    <% Project.visible.sort_by(&:created_at).reverse.first(11).each_with_index do |project, index| -%>
+
+      <%= render :partial => 'projects/newest_projects', :locals => {:project => project, :originators => project.originators} %>
+
+    <% end %>
+  </div>
+<% end %>

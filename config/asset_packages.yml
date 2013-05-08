@@ -1,0 +1,34 @@
+--- 
+javascripts:
+- base: 
+  
+  - jquery.ui
+  - jrails
+  - jquery.ui.autocomplete
+  - jquery.ui.autocomplete.ext
+  - facebox
+  - application
+  - mootools-1.2.4-core-yc
+  - jquery.rating
+  - jquery.form
+  - jquery.MetaData
+  - jquery.qtip
+ 
+- logged_in_only:
+  - user_voice
+- project_page:
+  - jquery.jcarousel
+- service_page:
+  - jquery.jcarousel
+- ie_fixes:
+  - correct_png
+
+stylesheets:
+- base:
+  - screen
+  - console
+  - jquery.jcarousel
+  - jquery.tabs
+  - uploadify
+  - jquery.rating
+  - jquery.qtip

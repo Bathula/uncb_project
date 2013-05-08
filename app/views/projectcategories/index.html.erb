@@ -1,0 +1,22 @@
+<h1>Listing projectcategories</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+  </tr>
+
+<% @projectcategories.each do |projectcategory| %>
+  <tr>
+    <td><%=h projectcategory.name %></td>
+    <td><%=h projectcategory.description %></td>
+    <td><%= link_to 'Show', projectcategory %></td>
+    <td><%= link_to 'Edit', edit_projectcategory_path(projectcategory) %></td>
+    <td><%= link_to 'Destroy', projectcategory, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New projectcategory', new_projectcategory_path %>

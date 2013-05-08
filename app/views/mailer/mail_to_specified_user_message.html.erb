@@ -1,0 +1,9 @@
+<p>Hi <%=@recipent%>,</p>
+<p>You have received a message from <%= link_to @display_name,@display_name_profile_url %> through Original Projects.</p>
+<p><%=@display_name%> wrote: </p>
+</ br>
+<p><%= @message %></p>
+</ br>
+<p>Yours truly, </p>
+<p>The Original Projects Team</p>
+<p>If you don’t want to receive these notifications, just log into your <%=link_to "Original Projects",my_settings_url%> account and change your notification settings.</p>

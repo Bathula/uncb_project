@@ -1,0 +1,210 @@
+
+<% if profile -%>
+  <div class="network_container" style="height:118px; border: 1px solid;border-color: #cccccc;">
+
+    <%if member.status.eql?(1)%>
+
+      <% @add_service=Service.find_by_id(member.member_id) %>
+      <%= link_to(image_tag(@add_service.avatar.url(:small), :class => 'border',:width=>85,:height=>85),service_path(@add_service),  :class => 'img_link', :style=>'margin:15px') -%>
+    <%else%>
+      <%= link_to(image_tag(profile.avatar.url(:small), :class => 'border',:width=>85,:height=>85), profile_path(profile), :class => 'img_link', :style=>'margin:15px') -%>
+    <%end%>
+
+
+    <div style="width:180px;float:left;padding-top: 10px; line-height: 18px; ">
+      <span style="font-size:14px"><strong><%if member.status.eql?(1)%><%=link_to @add_service.title,service_path(@add_service)%><%else%><%=link_to profile.name,profile_path(profile)%><%end%></strong></span><br/>
+
+      <span style="font-size:11px; font-weight:bold;">
+
+        <%if member.status.eql?(1)%>
+          <% if @add_service.location %>
+            <%=  truncate(@add_service.location, :omission => '... continued')%> <%#=  profile.country %>
+            <br />
+          <% end %>
+
+        <%else%>
+          <% if profile.location %>
+            <%=  truncate(profile.location, :omission => '... continued')%> <%#=  profile.country %>
+            <br />
+          <% end %>
+          <% if profile.phone_mobile %>
+            <%=  profile.phone_mobile %>
+            <br />
+          <% end %>
+        <%end%>
+      </span>
+
+
+      <%if member.status.eql?(1)%>
+        <%=  mail_to @add_service.email%><br />
+        <%=  auto_link(@add_service.url,:html=>{:target => '_blank'})%>
+      <%else%>
+        <%=  mail_to truncate(profile.email,:length=>25)%><br />
+        <%=  auto_link(profile.url,:html=>{:target => '_blank'})%>
+      <%end%>
+    </div>
+    <div class="network_projects" style="width:250px;height:108px; padding-left:10px;">
+      <%if member.status.eql?(1)%>
+        <span style="font-size:13px;line-height:14px; font-weight: normal; word-wrap: break-word;">
+          <b> Service:</b>
+
+          <span style="font-size:10px;"><%=truncate(@add_service.description.gsub(/<\/?[^>]*>/, ""),:length => 280)%><% if @add_service.description.length > 300 %> <%=link_to "More",service_path(@add_service)%><%end%></span>
+        </span>
+      <%else%>
+
+
+
+
+
+
+
+
+
+
+        <%@service_project_count=0%>
+        <%@services_length=138%>
+        <%@services_projects_length=48%>
+        <%@projects_length=138%>
+        <%@projects_services_length=80%>
+        <%@project_service_count=0%>
+        <%@service_count=0%>
+        <%@project_count=0%>
+
+        <%if profile.originated_services.present?%>
+
+
+          <%if profile.originated_projects.present?%>
+            <span style="overflow:hidden;float:left;max-height:40px;font-size:11px; font-weight: normal; word-wrap: break-word;">
+            <%else%>
+              <span style="overflow:hidden;font-size:11px;float:left; max-height:100px;font-weight: normal; word-wrap: break-word;">
+              <%end%>
+
+
+
+
+
+              <b> Services:</b>
+
+              <%@servicelist= profile.originated_services.find(:all,:conditions=>['public=?',true],:order=>'created_at ASC')%>
+
+
+
+
+              <%if profile.originated_projects.present?%>
+
+                <%@servicelist.each do|ser|%>
+
+                  <%  if ser.title.length<@services_projects_length  %>
+                    <%= link_to ser.title,ser %>
+                    <%if !@service_project_count.eql?(@servicelist.size-1)%>
+                      ,
+                    <%end%>
+                    <%@services_projects_length=@services_projects_length-ser.title.length%>
+                  <%else%>
+                    <%= link_to truncate(ser.title,:length => @services_projects_length), ser %>
+                    <%if !@service_project_count.eql?(@servicelist.size-1)%>
+                      <%@services_projects_more=1%>
+                    <%end%>
+                    <%break%>
+                  <%end%>
+
+                  <%@service_project_count=@service_project_count+1;%>
+                <%end%>
+
+                <%if @services_projects_more.eql?(1)%>
+                  <%=link_to "More",profile_path(profile,:anchor => "service")%>
+                <%end%>
+              <%else%>
+                <%@servicelist.each do|ser|%>
+                  <%  if ser.title.length<@services_length  %>
+                    <%= link_to ser.title,ser %>
+                    <%if !@service_count.eql?(@servicelist.size-1)%>
+                      ,                     <%end%>
+                    <%@services_length=@services_length-ser.title.length%>
+                  <%else%>
+                    <%= link_to truncate(ser.title,:length => @services_length), ser %>
+                    <%if !@service_count.eql?(@servicelist.size-1)%>
+                      <%@services_more=1%>
+                    <%end%>
+                    <%break%>
+                  <%end%>
+                  <%@service_count=@service_count+1;%>
+                <%end%>
+                <%if @services_more.eql?(1)%>
+                  <%=link_to "More",profile_path(profile,:anchor => "service")%>
+                <%end%>
+              <%end%>
+            </span>
+            <br />
+          <%end%>
+          <%if profile.originated_projects.present?%>
+            <%if profile.originated_services.present?%>
+              <span style="overflow:hidden;float:left;max-height:60px;font-size:11px; font-weight: normal; word-wrap: break-word;">
+              <%else%>
+                <span style="overflow:hidden;font-size:11px;float:left; max-height:100px;font-weight: normal; word-wrap: break-word;">
+                <%end%>
+                <b> Projects:</b>
+                <%@profilelist=profile.originated_projects.find(:all,:conditions=>['public=?',true],:order=>'created_at ASC')%>
+                <%if profile.originated_services.present?%>
+                  <%@profilelist.each do|pro|%>
+
+                  
+                    <%  if pro.title.length<@projects_services_length  %>
+
+                      <%= link_to pro.title,pro %>
+                      <%if !@project_service_count.eql?(@profilelist.size-1)%>
+                        ,                     <%end%>
+                      <%@projects_services_length=@projects_services_length-pro.title.length-1%>
+                    <%else%>
+                      <%= link_to truncate(pro.title,:length => @projects_services_length -3), pro %>
+                      <%if !@project_service_count.eql?(@profilelist.size-1)%>
+                        <%@more=1%>
+                      <%end%>
+                      <%break%>
+                    <%end%>
+                    <%@project_service_count=@project_service_count+1;%>
+                  <%end%>
+                  <%if @more.eql?(1)%>
+                    <%=link_to "More",profile_path(profile,:anchor => "projects")%>
+                  <%end%>
+                <%else%>
+                  <%@profilelist.each do|pro|%>
+                    <%  if pro.title.length<@projects_length  %>
+                      <%= link_to pro.title,pro %>
+                      <%if !@project_count.eql?(@profilelist.size-1)%>
+                        ,                     <%end%>
+                      <%@projects_length=@projects_length-pro.title.length-1%>
+                    <%else%>
+                      <%= link_to truncate(pro.title,:length => @projects_length -3), pro %>
+                      <%if !@project_count.eql?(@profilelist.size-1)%>
+                        <%@projects_more=1%>
+                      <%end%>
+                      <%break%>
+                    <%end%>
+                    <%@project_count=@project_count+1%>
+                  <%end%>
+                  <%if @projects_more.eql?(1)%>
+                    <%=link_to "More",profile_path(profile,:anchor => "projects")%>
+                  <%end%>
+                <%end%>
+              </span>
+            <%end%>
+
+          <%end%>
+          </div>
+          <div class="send_message" style="float:right; text-align:right; height:108px;">
+            <%if member.status.eql?(1)%>
+
+              <%@network= Network.find_by_member_id_and_profile_id(member.member_id,current_profile).id%>
+            <%else%>
+              <%@network= Network.find_by_member_id_and_profile_id(profile.id,current_profile).id%>
+            <%end%>
+<%=javascript_include_tag "recaptcha_ajax"%>
+            <%=link_to("send message", new_network_path(:profile_id =>profile.id,:title=>profile.display_name), :return_to => networks_url, :rel => "facebox")%><div style="float:right; text-align:center; width:15px; padding-left:5px; padding-top:5px;"><img src="/images/icon_email.gif" /></div>
+            <%= link_to "delete contact", delete_networks_path(:id=>@network), :confirm => 'Are you sure you want to delete from your network?', :method => :delete %><div style="float:right; text-align:center; width:15px; padding-left:5px; padding-top:5px;"><img src="/images/icon_close.gif" /></div>
+
+          </div>
+          </div>
+        <% end -%>
+
+

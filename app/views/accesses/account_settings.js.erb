@@ -1,0 +1,8 @@
+
+<%if params[:id]%>
+jQuery('#accounts').html("<%=escape_javascript(render(:partial => 'password'))%>");
+jQuery('#content').hide();
+<%else%>
+jQuery('#accounts').hide();
+jQuery('#content').show();
+<%end%>

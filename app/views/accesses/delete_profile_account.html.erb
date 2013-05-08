@@ -1,0 +1,37 @@
+
+
+<h2 class="top" style="background-color:#ffff00; float:left; padding:3px;">Caution!</h2>
+<div class="clear" style="padding-top:10px;"></div>
+<h2 class="top">You are about to permanently delete your Original Projects account.</h2>
+<h2 class="top">This action cannot be undone.</h2><br/><br />
+<h2 class="top">Are you recieving too many emails?</h2>
+<p>Instead of deleting your account try <%=link_to "changing your notification settings",my_settings_url%></p><br /><br />
+<p><h2 class="top">Contact us</h2></p>
+<p>Free free to contact us first if you have any other questions or concerns.</p><br /><br />
+<p><h2 class="top">We are sad to see you go.</h2></p>
+
+
+<%if @errors.present?%>
+<div id="errorExplanation" class="errorExplanation" style="width:400px;">
+   <ul>
+<% @errors.each do |error| %>
+          <li><%= h(error) %></li>
+        <% end %>
+            </ul>
+</div>
+          <%end%>
+<div style="margin-top:40px;">
+<% form_for :profile_session, :url => delete_account_accesses_url  do |form| %>
+  <label class="required">Password</label>
+    <div class="input_frame" style="width:230px;">
+      <%= form.password_field :password, :style=>"width:227px;" %>
+    </div>
+
+  <input name="profile_session[email]" type="hidden" value=<%=current_profile.email%> />
+
+   <%= image_submit_tag("btn_delete_account.png",:style=>"border:none; float:left;") %>
+
+   <% end %>
+</div>
+
+<span style="float:left; padding:18px 0px 0px 20px;"><%=link_to "Cancel",password_accesses_url%></span>

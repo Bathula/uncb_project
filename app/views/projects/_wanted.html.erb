@@ -1,0 +1,19 @@
+ <div id="resources" class="anchor">
+      <%if @project.resources_needed.present? %>
+      <h2>Resources Needed</h2>
+
+      <%= simple_format @project.resources_needed %>
+      <%else%>
+      No resources needed at the moment.
+      <%end%>
+      <br></br>
+
+<%if @project.current_resources.present? %>
+      <h2>Current Resources</h2>
+
+      <%= simple_format @project.current_resources %>
+    <%#*</div>%>
+<%else%>
+    There are no current resources at the moment.
+    <%end%>
+     </div>

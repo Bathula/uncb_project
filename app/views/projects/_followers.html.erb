@@ -1,0 +1,12 @@
+ <div id="followers" class="anchor">
+
+      <% if @project.non_member_followers.size > 0 %>
+        <h2>Followers</h2>
+        <input type="hidden" id="follow_ers" value="1">
+        <% @followers.each do |profile| %>
+          <%= render :partial => 'profile_box', :locals => {:profile => profile} %>
+        <% end %>
+        <div id="pagination" style="margin-top: 10px;"><%= will_paginate @followers,:params => {:type=>"followers"} %></div>
+
+      <% end %>
+    </div>

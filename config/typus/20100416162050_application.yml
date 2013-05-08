@@ -1,0 +1,63 @@
+# Typus Models Configuration File
+#
+# Use the README file as a reference to customize settings.
+
+
+Service:
+  fields:
+    list: active, public, featured, membership_status, title, created_at, category
+    form: active, public, featured, membership_status, title, category, description, short_description, location, email, servicelist
+  order_by: 
+  relationships: category
+  filters: 
+  search: title
+  application: Services
+
+ServiceInterest:
+  fields:
+    list: profile, service
+    form: profile, service
+  order_by: 
+  relationships: profile, service
+  filters: 
+  search: 
+  application: Services
+
+ServiceMembership:
+  fields:
+    list: originator, profile, service
+    form: originator, profile, service
+  order_by: 
+  relationships: profile, service
+  filters: 
+  search: 
+  application: Services
+
+ServiceMembershipRequest:
+  fields:
+    list: profile, service
+    form: profile, service
+  order_by: 
+  relationships: profile, service
+  filters: 
+  search: 
+  application: Services
+
+
+Projectcategory:
+  fields:
+  list: name
+  form: name
+  order_by:
+  relationships: projects
+  search:
+  application: Original Projects
+
+Batch:
+  fields:
+  list: name
+  form: name
+  order_by:
+  relationships: projects
+  search:
+  application: Original Projects

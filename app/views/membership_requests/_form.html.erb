@@ -1,0 +1,15 @@
+<h1>Thanks for requesting to join this project.</h1>
+<p>Becoming a team member of this project requires approval.</p><p>Please explain why you'd like to join.</p>
+<br/>
+<% form_for :message ,@message, :html => { :class => "message_form" },:url=>{:controller=>"membership_requests",:action=>"create_member"} do |f| %>
+ <%= hidden_field_tag(:return_to, return_to) if return_to.present?%>
+  <p>
+    <%#= f.label :like_to_join, "Why would you like to join " %>
+    <%= f.text_area :like_to_join, :rows => 5 %>
+  </p>
+
+  <div id="dynamic_recaptcha"></div>
+
+  <p><button type="submit" class="large">Join This Project</button></p>
+<% end %>
+

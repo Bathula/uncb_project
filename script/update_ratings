@@ -1,0 +1,95 @@
+#!/usr/local/bin/ruby
+RAILS_ENV = 'production'
+require File.dirname(__FILE__) + '/../config/environment'
+ 
+for rating in Rating.find(:all)
+#	print rating.rateable_id
+# 	print "\r\n"
+  rating.update_rating
+	p = Project.find(rating.rateable_id)
+	p.update_ratings_cache
+	p.save!
+
+	#CHECK Project.rating_cache against computed value
+	#relatively loose comparison
+	if p.rating_count_cache > 4
+		delta = p.average_rating.round(3)
+	else
+		delta = (p.average_rating ** 0.6).round(3)
+	end	
+
+	if delta != p.rating_cache.round(3)
+ 		print "\r\n############################################\r\n"
+		print 'Project.rating_cache out of sync for project id %s' % p.id
+ 		print "\r\n"
+		print "Project.rating_cache: "
+		print p.rating_cache
+ 		print "\r\n"
+		print "WEIGHTED project rating by method: "
+		#print p.average_rating
+		print delta
+ 		print "\r\n"
+	end
+
+	#CHECK Project.rating_count_cache against computed value
+	if p.ratings_count != p.rating_count_cache
+ 		print "\r\n############################################\r\n"
+		print 'Project.rating_count_cache out of sync for project id %s' % p.id
+ 		print "\r\n"
+		print "Project.rating_count_cache: "
+		print p.rating_count_cache
+ 		print "\r\n"
+		print "project rating count by method: "
+		print p.ratings_count
+ 		print "\r\n"
+	end
+
+	#CHECK Project.rating_cache_pro against computed value
+	if p.rating_cache_pro
+		if p.average_rating_pro != p.rating_cache_pro
+ 			print "\r\n############################################\r\n"
+			print 'Project.rating_cache_pro out of sync for project id %s' % p.id
+ 			print "\r\n"
+			print "Project.rating_cache_pro: "
+			print p.rating_cache_pro
+ 			print "\r\n"
+			print "project rating by method: "
+			print p.average_rating_pro
+ 			print "\r\n"
+		end
+	end
+
+	if p.rating_count_cache_pro
+		#CHECK Project.rating_cache against computed value
+		if p.ratings_count_pro != p.rating_count_cache_pro
+ 			print "\r\n############################################\r\n"
+			print 'Project.rating_count_cache_pro out of sync for project id %s' % p.id
+ 			print "\r\n"
+			print "Project.rating_count_cache_pro: "
+			print p.rating_count_cache_pro
+ 			print "\r\n"
+			print "project rating count pro by method: "
+			print p.ratings_count_pro
+ 			print "\r\n"
+		end
+	end
+	#rating.save!
+end
+
+
+#for proj in Project.find(:all)
+# 	print "\r\n"
+# 	print "ratings count: "
+#	print proj.ratings_count
+# 	print "\r\n"
+# 	print "ratings count pro: "
+#	print proj.ratings_count_pro
+# 	print "\r\n"
+# 	print "average ratings : "
+#	print proj.average_rating
+# 	print "\r\n"
+# 	print "average ratings pro : "
+#	print proj.average_rating_pro
+#end
+
+#rateable 213 3.7273

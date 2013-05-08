@@ -1,0 +1,174 @@
+
+<% content_for :page_title, "Reply Message" %>
+
+<div id="content">
+<%= render :partial => "shared/inbox_sidebar" %>
+
+<!-- closing left column -->
+
+ <div class="column col_70" >
+
+<h1><%=h @message.subject %></h1>
+
+<%if !@message.from.nil?%>
+<p> From <%=link_to  @message.from.display_name ,@message.from%>
+<%else%>
+   <%@profile=Profile.find_with_deleted(@message.from_id)%>
+<p>From <span style="font-size: 1.0em; font-weight: bold;"><%=@profile.display_name%></span>
+<%end%> to <%=@message.recipients.find_with_deleted(:all).collect{|recipient| if recipient.deleted_at.nil? 
+    link_to recipient.display_name,recipient else recipient.display_name end}.join(",")%> at <%=display_date(@message.created_at) %>
+</p>
+
+<p style="border:1px solid #767E83; padding:5px; min-height:100px;"><%=h @message.body%></p>
+
+<%if @message.message_attachments.exists?%>
+<p><b>Attached Files:</b><div id="attachment_list"><%= render :partial => "attachment", :collection => @message.message_attachments %></div></p>
+<%end%>
+
+<% if @reply=="yes" %>
+<a href="" onclick="displaydiv();return false;"><%=image_tag('/images/button-reply.gif',:style=>"float:left; margin-right:3px;" )%></a>
+<%if params[:rto].eql?("sent")%>
+
+<%= link_to(image_tag('btn_delete.gif',:style=>"float:left; margin-right:3px;"),  :controller => :inboxes, :action => :delete_message, :un=>'s',:id=>params[:id]) -%>
+<%= link_to(image_tag('btn_back_to_messages.gif',:style=>"float:left; margin-right:3px;"),'/inbox/sent') -%>
+ <%elsif params[:rto].eql?("unread")%>
+<%= link_to(image_tag('btn_delete.gif',:style=>"float:left; margin-right:3px;"),  :controller => :inboxes, :action => :delete_message, :un=>'u',:id=>params[:id]) -%>
+<%= link_to(image_tag('btn_back_to_messages.gif',:style=>"float:left; margin-right:3px;"), 'inbox/unread') -%>
+<%else%>
+<%= link_to(image_tag('btn_delete.gif',:style=>"float:left; margin-right:3px;"),  :controller => :inboxes, :action => :delete_message, :un=>'a',:id=>params[:id]) -%>
+<%= link_to(image_tag('btn_back_to_messages.gif',:style=>"float:left; margin-right:3px;"),  '/inbox/') -%>
+<%end%>
+<%end%>
+
+
+ <div id="reply" style="display:none; float:left; margin-top:15px;">
+
+
+  
+
+<% form_for :message,@message , :html => {:multipart=>true,:id=>"reply_form"},:url=> {:controller=>"inboxes",:action =>"create"} do |f| %>
+
+<label for="message_subject" class="required" id="subject_label">Subject</label>
+  <br>
+  <div class="input_frame" style="margin-bottom:15px;">
+    <input type="text" style="margin: 0px 0px 10px;" size="30" name="message[subject]" id="message_subject" class="text_field required" value="Re:<%=@message.subject%>" >
+  </div>
+
+ <%#= f.field_for :subject,:label => "Subject",:value=>"Re:#{@message.subject}" ,:style=>"float:left; margin:0px 0px 10px 0px;"%>
+ <label for="message_body" class="required" id="msg_label">Content</label>
+  <br>
+    <div class="input_frame" style="margin-bottom:15px;">
+      <textarea style="width: 353px; margin: 0px 0px 10px;" rows="12" name="message[body]" id="message_body" cols="40" class="text_area required"></textarea>
+    </div>
+  <%#= f.field_for :body,:rows => 12,:value=>'',:label => "Content",:style=>"float:left; width:353px;margin:0px 0px 10px 0px;"%>
+
+
+
+<%if @replyto.eql?("sent")%>
+    <input type="hidden" value="nil:<%=@message.recipients.collect(&:id).join(":")%>" id="uids" name='uids' />
+
+    <input type="hidden" value="sent" name="redirect">
+    <%else%>
+<input type="hidden" value="unread" name="redirect">
+<input type="hidden" value="nil:<%=@message.from_id%>" id="uids" name='uids' />
+<%end%>
+    <%#*<input id="imessage_submit" name="commit" type="image" value="Send" src="/images/button-send.gif"/>%>
+
+    <%#*<input id="imessage_clear" name="clear" type="image" src="/images/button-clear.gif"/>%>
+<label class="required">Add Attachments</label>
+      <br/>
+      <div class="input_frame" style="margin-bottom:12px;">
+           <p class="small_note">You can attach up to 5 files at a time.<br/>
+      </p>
+        <div id="image_collection">
+          <div class="image" style="margin-bottom:10px;">
+           <input type="file" size="22" name="attachment[]" id="attachment">
+            <div class="clear"></div>
+          </div>
+
+
+        </div>
+        <button id="add_image" onclick="return add_more_images();">Add More Attachments</button>
+
+      </div>
+<%=image_submit_tag("button-send.gif",:style=>"border:none; margin:0px; padding:0px;",:onclick=>"return validate_reply_form();")%>
+
+<%#*</fieldset>%>
+<% end %>
+ </div>
+
+</div>
+</div>
+
+
+ <br />
+ 
+
+   
+ 
+ <script type="text/javascript">
+    var upload_image_count=1;
+   function displaydiv()
+   {
+
+     document.getElementById('reply').style.display="block";
+   }
+
+    function validate_reply_form()
+  {
+    var valid=true;
+    var form_id=document.getElementById('reply_form');
+    
+
+
+    if(document.getElementById('message_subject').value=="")
+   {
+
+
+   document.getElementById('subject_label').innerHTML="Subject <span style='color:red'>can't be blank</span>";
+
+
+   valid=false;
+   }
+   else
+     {
+        document.getElementById('subject_label').innerHTML="Subject";
+     }
+    if(document.getElementById('message_body').value=="")
+   {
+//alert(div_id.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling);
+
+  document.getElementById('msg_label').innerHTML="Content <span style='color:red'>can't be blank</span>";
+
+
+   valid=false;
+   }
+   else
+     {
+       document.getElementById('msg_label').innerHTML="Content";
+     }
+
+return valid;
+
+  }
+   function add_more_images()
+  {
+    if(upload_image_count < 5)
+     {
+   var attachments_data=document.getElementById('image_collection').innerHTML;
+   var div_node=document.createElement('div');
+   div_node.setAttribute('class', 'image');
+   div_node.setAttribute('style','margin-bottom:10px;');
+   div_node.innerHTML='<input type="file" size="22" name="attachment[]" id="upload_attachment"><div class="clear"></div>';
+  // var new_attachment='<div class="image" style="margin-bottom:10px;"></div>';
+  //document.getElementById('image_collection').innerHTML=attachments_data+new_attachment;
+  document.getElementById('image_collection').appendChild(div_node);
+   upload_image_count=upload_image_count+1;
+  return false;
+   }
+     else
+       {
+         return false;
+       }
+  }
+ </script>

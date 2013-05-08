@@ -1,0 +1,17 @@
+<li style="margin-bottom:0px; border:none; ">
+  <div class="first" >
+    <%= image_tag(project.avatar.url(:square_60)) %>
+    <h3><%= link_to truncate(project.title,:length=>25), project %></h3>
+  </div>
+
+  <div style="height:auto; overflow:auto; margin-top:0px; padding-top:0px; float:left; width:300px;">
+    <strong>Originators:</strong> <%= project.originators.map {|o| link_to o.name, o } * ", " %>
+  </div>
+
+  <div class="last" style="float:left; width:130px; height:auto;">
+      <%#if logged_in?%>
+    <%#= link_to "Send a message", "#" %>
+    <%#end%>
+  </div>
+</li>
+<div style="clear:both; border-bottom:1px solid #cccccc; margin:6px 0px 8px 0px;"></div>
